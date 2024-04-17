@@ -1,0 +1,71 @@
+#feature {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: linear-gradient(45deg, #0e86a1, #b689cdcb, #b17074bb);
+    padding: 40px; /* Adjusted padding */
+}
+
+.fe-box {
+    width: 180px;
+    text-align: center;
+    padding: 25px 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+    position: relative; /* Added position relative */
+    height: 250px; /* Set a fixed height for all boxes */
+    border: 2px solid rgba(46, 13, 13, 0.43);
+
+}
+
+
+.fe-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.fe-box img {
+    width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid rgba(46, 13, 13, 0.336);
+    border-radius: 6px;
+
+}
+
+.fe-box h6 {
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: #13091d;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 2;
+    padding: 8px;
+    border: 2px solid rgba(46, 13, 13, 0.43);
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.366);
+}
+
+/* Updated background colors for better contrast */
+.fe-box:nth-child(1) {
+    background-color: #bf69c1a5;
+}
+.fe-box:nth-child(2) {
+    background-color: #ffecb3af;
+}
+.fe-box:nth-child(3) {
+    background-color: #f8bbd0;
+}
+.fe-box:nth-child(4) {
+    background-color: #c8e6c9;
+}
+.fe-box:nth-child(5) {
+    background-color: #bbdefb;
+}
+
+.section-p1 {
+    padding: 80px 0;
+}
+

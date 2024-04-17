@@ -1,0 +1,46 @@
+.animated-text {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 0.15em solid rgb(68, 83, 111); /* Adjust the color of the typing cursor */
+  line-height: 1.8;
+  animation: typing 6s steps(45) infinite;
+  white-space: nowrap; 
+    font-size: 38px; /* Increase text size */
+    margin-top: 180px;
+    margin-left: 30px;
+    font-family:cursive;
+    color: rgba(12, 39, 50, 0.702);
+}
+
+.animated-text-container {
+  display: flex;
+  flex-direction: column;
+  /* max-width: 80%; */
+
+}
+
+.animated-text-line {
+  display: block;
+  margin-bottom: 1em; /* Add margin between lines */
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Add hover effect to Show More button */
+.show-more-button {
+  transition: all 0.3s ease-in-out; /* Smooth transition effect */
+}
+
+.show-more-button:hover {
+  transform: translateY(-3px); /* Move the button slightly upwards on hover */
+  color: #bc1b31; /* Change text color on hover */
+  /* Add a subtle shadow effect */
+}
+

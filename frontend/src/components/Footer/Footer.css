@@ -1,0 +1,58 @@
+/* Footer.css */
+
+.footer {
+    background: linear-gradient(90deg, #2a4841e3, #125c63);
+    padding: 80px; /* Add padding for space */
+    color: #e7e9ea; /* Set default text color */
+}
+
+.footer h6 {
+    margin-bottom: 16px; /* Increase bottom margin for separation */
+}
+
+.footer a {
+    color: #cbd5e0;
+    transition: color 0.3s ease; /* Add transition for smooth hover effect */
+    text-decoration: none; /* Remove default underline */
+    border-bottom: 1px solid transparent; /* Add border bottom */
+}
+
+.footer a:hover {
+    color: #ffffff;
+    border-color: #ffffff; /* Change border color on hover */
+}
+
+.input {
+    background-color: #141414;
+    color: #ffffff;  /* Ensure text is white for visibility */
+    border-color: #4a5568;
+    transition: border-color 0.3s ease;
+    padding: 8px;
+}
+
+.input:focus {
+    border-color: #4fd1c5;
+    color: #051d3ccc; /* Change text color on focus */
+}
+
+.btn-primary {
+    background-color: #4fd1c5;
+    border-color: #4fd1c5;
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Add transition for smooth hover effect */
+    padding: 8px 16px; /* Add padding to button */
+    cursor: pointer; /* Add cursor pointer */
+}
+
+.btn-primary:hover {
+    background-color: #38a89d;
+    border-color: #38a89d;
+}
+
+.join {
+    display: flex; /* Add flex display to align items */
+}
+
+.join input[type="text"] {
+    flex: 1; /* Take remaining space */
+    margin-right: 8px; /* Add margin between input and button */
+}
