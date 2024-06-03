@@ -4,7 +4,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import "../../styles/AuthStyle.css";
 import Layout from "../../components/Layouts/Layout";
+import Loader from "../../components/Loader";
 const Register = () => {
+    const [loading, setLoading] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,6 +20,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             const res = await axios.post("/api/v1/auth/register", {
                 name,
                 email,
@@ -26,9 +29,10 @@ const Register = () => {
                 address,
                 answer,
             });
+            setLoading(false);
             if (res && res.data.success) {
-                // navigate("/login");
                 setOk(true)
+                // navigate("/login");
                 toast.success(res.data && res.data.message);
             } else {
                 toast.error(res.data.message);
@@ -41,76 +45,79 @@ const Register = () => {
 
     return (
         <Layout title="Register - Ecommer App">
-            <div className="form-container ">
-                <form onSubmit={handleSubmit}>
-                    {ok && <div className="alert alert-success">Check your email <span>{email}</span> .An activation link has been sent </div>}
-                    <h4 className="title">REGISTER FORM</h4>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="form-control"
-                            placeholder="Enter Your Name"
-                            required
-                            autoFocus
-                        />
+            {loading ? <Loader message={'Email is on the way'} /> :
+                <>
+                    <div className="form-container ">
+                        <form onSubmit={handleSubmit}>
+                            {ok && <div className="alert alert-success">Check your email <span>{email}</span> .An activation link has been sent </div>}
+                            <h4 className="title">REGISTER FORM</h4>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="form-control"
+                                    placeholder="Enter Your Name"
+                                    required
+                                    autoFocus
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="form-control"
+                                    placeholder="Enter Your Email "
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="form-control"
+                                    placeholder="Enter Your Password"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="form-control"
+                                    placeholder="Enter Your Phone"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    className="form-control"
+                                    placeholder="Enter Your Address"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    value={answer}
+                                    onChange={(e) => setAnswer(e.target.value)}
+                                    className="form-control"
+                                    placeholder="What is your favourite food?"
+                                    required
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary">
+                                REGISTER
+                            </button>
+                        </form>
                     </div>
-                    <div className="mb-3">
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="form-control"
-                            placeholder="Enter Your Email "
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="form-control"
-                            placeholder="Enter Your Password"
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="form-control"
-                            placeholder="Enter Your Phone"
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            className="form-control"
-                            placeholder="Enter Your Address"
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            value={answer}
-                            onChange={(e) => setAnswer(e.target.value)}
-                            className="form-control"
-                            placeholder="What is your favourite food?"
-                            required
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-primary">
-                        REGISTER
-                    </button>
-                </form>
-            </div>
+                </>}
         </Layout>
     );
 };

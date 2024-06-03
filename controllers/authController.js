@@ -339,6 +339,20 @@ export const updateOrderStatusController = async (req, res) => {
         });
     }
 }
+//all user data
+export const getAllUsersController = async (req, res) => {
+    try {
+        const users = await userModel.find({});
+        res.json(users);
+    } catch (error) {
+        console.error(`Error in getAllUsersController: ${error}`);
+        res.status(500).send({
+            success: false,
+            message: 'Error in Fetching All Users',
+            error
+        });
+    }
+}
 
 export const testController = async (req, res) => {
     try {

@@ -4,13 +4,14 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path'
+import connectDB from './config/db.js';
 import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/authRoute.js';
 import categoryRoutes from './routes/categoryRoute.js';
 import productRoutes from './routes/productRoute.js';
 import paymentRoutes from './routes/paymentRoute.js';
-import connectDB from './config/db.js';
+
 
 dotenv.config();
 const app = express();
@@ -30,7 +31,8 @@ app.use(morgan('dev'));
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/product', productRoutes);
-app.use('/api/v1/payment',paymentRoutes)
+app.use('/api/v1/payment', paymentRoutes)
+
 app.use(express.static(path.join(__dirname, './client/build')));
 
 const port = process.env.PORT || 3000;

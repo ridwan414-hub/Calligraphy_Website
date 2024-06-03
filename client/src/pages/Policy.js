@@ -4,15 +4,15 @@ import Layout from "../components/Layouts/Layout";
 const Policy = () => {
     return (
         <Layout title={'Privacy Policy'}>
-            <div className="row contactus ">
-                <div className="col-md-6 ">
+            <div className="flex flex-row contactus ">
+                <div className="w-1/2">
                     <img
                         src="/images/contactus.jpeg"
                         alt="contactus"
-                        style={{ width: "100%" }}
+                        className="w-full"
                     />
                 </div>
-                <div className="col-md-4">
+                <div className="w-1/3">
                     <p>add privacy policy</p>
                     <p>add privacy policy</p>
                     <p>add privacy policy</p>

@@ -62,14 +62,14 @@ const CreateProduct = () => {
 
     return (
         <Layout title={"Dashboard - Create Product"}>
-            <div className="container-fluid m-3 p-3">
-                <div className="row">
-                    <div className="col-md-3">
+            <div className="container mx-auto my-3 p-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="col-span-1">
                         <AdminMenu />
                     </div>
-                    <div className="col-md-9">
-                        <h1>Create Product</h1>
-                        <div className="m-1 w-75">
+                    <div className="col-span-2">
+                        <h1 className="text-3xl font-bold">Create Product</h1>
+                        <div className="m-1 w-3/4">
                             <Select
                                 variant={false}
                                 placeholder="Select a category"
@@ -87,7 +87,7 @@ const CreateProduct = () => {
                                 ))}
                             </Select>
                             <div className="mb-3">
-                                <label className="btn btn-outline-secondary col-md-12">
+                                <label className="btn btn-outline-secondary col-span-12">
                                     {photo ? photo.name : "Upload Photo"}
                                     <input
                                         type="file"

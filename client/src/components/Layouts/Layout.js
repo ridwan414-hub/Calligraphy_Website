@@ -3,15 +3,16 @@ import Header from './Header';
 import Footer from './Footer';
 import { Helmet } from 'react-helmet';
 import { Toaster } from 'react-hot-toast';
-import Sidebar from '../Sidebar';
+
+// import Sidebar from '../Sidebar';
 
 
 const Layout = ({
     children,
-    title='Welcome to the ecommerce website',
-    description='We sell the best products for cheap',
-    keywords='electronics, buy electronics, cheap electronics',
-    author='Ridwan Mahmoud' }) => {
+    title = 'Welcome to the ecommerce website',
+    description = 'We sell the best products for cheap',
+    keywords = 'electronics, buy electronics, cheap electronics',
+    author = 'Ridwan Mahmoud' }) => {
     return (
         <div>
             <Helmet>
@@ -26,15 +27,13 @@ const Layout = ({
                 reverseOrder={false}
             />
             <Header />
-            <main style={{ minHeight: '70vh', backgroundColor:'aliceblue' }}>
+            <main
+                className='mx-auto px-4 max-w-screen-lg flex flex-col min-h-screen bg-aliceblue'>
                 {children}
             </main>
             <Footer />
         </div>
     );
 };
-
-
-
 
 export default Layout;

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Spinner = ({ path = 'login', errorMessage = '', successMessage = '' }) => {
-    const [count, setCount] = useState(5)
+    const [count, setCount] = useState(3)
     const navigate = useNavigate()
     const location = useLocation()
     const notifyError = () => toast.error(`${errorMessage}`)
@@ -23,12 +23,9 @@ const Spinner = ({ path = 'login', errorMessage = '', successMessage = '' }) => 
     return (
         <>
             {successMessage ? notifySuccess() : notifyError()}
-            <div className="d-flex flex-column justify-content-center align-items-center"
-                style={{ height: "100vh" }}>
+            <div className="flex flex-col justify-center items-center h-screen">
                 <h1 className='text-center'>redirecting to you in {count} second</h1>
-                <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
             </div>
         </>
     );

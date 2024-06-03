@@ -23,39 +23,39 @@ const Header = () => {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary">
+            <nav className="flex justify-between bg-body-tertiary">
                 <div className="container-fluid">
-                    <Link to='/' className="navbar-brand" > 🛒Ecommerce App</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon" />
+                    <Link to='/' className="text-xl font-bold"> 🛒Artwork Gallery</Link>
+                    <button className="flex items-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="w-6 h-6" />
                     </button>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-                        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <ul className="flex space-x-4 ms-auto mb-2 mb-lg-0">
                             <SearchInput />
-                            <li className="nav-item">
+                            <li className="flex items-center">
                                 <NavLink
-                                    to='/' className="nav-link"
+                                    to='/' className="text-gray-700 hover:text-gray-900"
                                 >Home
                                 </NavLink>
                             </li>
-                            <li className="nav-item dropdown">
+                            <li className="relative">
                                 <Link
-                                    className="nav-link dropdown-toggle"
+                                    className="cursor-pointer"
                                     to={"/categories"}
                                     data-bs-toggle="dropdown"
                                 >
                                     Categories
                                 </Link>
-                                <ul className="dropdown-menu">
+                                <ul className="absolute hidden">
                                     <li>
-                                        <Link className="dropdown-item" to={"/categories"}>
+                                        <Link className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" to={"/categories"}>
                                             All Categories
                                         </Link>
                                     </li>
                                     {categories?.map((c) => (
                                         <li key={c._id}>
                                             <Link
-                                                className="dropdown-item"
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                                 to={`/category/${c.slug}`}
                                             >
                                                 {c.name}
@@ -66,27 +66,27 @@ const Header = () => {
                             </li>
 
                             {!auth.user ? (<>
-                                <li className="nav-item">
-                                    <NavLink to='/register' className="nav-link" >Register</NavLink>
+                                <li className="flex items-center">
+                                    <NavLink to='/register' className="text-gray-700 hover:text-gray-900" >Register</NavLink>
                                 </li>
-                                <li className="nav-item">
-                                    <NavLink to='/login' className="nav-link" >Login</NavLink>
+                                <li className="flex items-center">
+                                    <NavLink to='/login' className="text-gray-700 hover:text-gray-900" >Login</NavLink>
                                 </li>
                             </>) : (<>
-                                <li className="nav-item dropdown">
-                                    <Link className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <li className="relative">
+                                    <Link className="cursor-pointer" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {auth?.user?.name}
                                     </Link>
-                                    <ul className="dropdown-menu">
-                                        <li><NavLink to={`/dashboard/${auth?.user?.role === 1 ? 'admin' : 'user'}`} className="dropdown-item">Dashboard</NavLink></li>
-                                        <li ><NavLink to='/login' className="dropdown-item" onClick={handleLogOut}>Logout</NavLink></li>
+                                    <ul className="absolute hidden">
+                                        <li><NavLink to={`/dashboard/${auth?.user?.role === 1 ? 'admin' : 'user'}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Dashboard</NavLink></li>
+                                        <li ><NavLink to='/login' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" onClick={handleLogOut}>Logout</NavLink></li>
                                     </ul>
                                 </li>
                             </>)}
 
-                            <li className="nav-item">
+                            <li className="flex items-center">
                                 <Badge count={cart?.length} showZero>
-                                    <NavLink to='/cart' className="nav-link">Cart</NavLink>
+                                    <NavLink to='/cart' className="text-gray-700 hover:text-gray-900">Cart</NavLink>
 
                                 </Badge>
                             </li>

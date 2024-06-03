@@ -5,14 +5,12 @@ const UserMenu = () => {
     return (
         <>
             <div className='text-center'>
-                <div className="list-group">
-                    <h4>Dashboard</h4>
-                    <NavLink to="/dashboard/user/profile" className="list-group-item list-group-item-action">Profile</NavLink>
-                    <NavLink to="/dashboard/user/orders" className="list-group-item list-group-item-action">Orders</NavLink>
-
+                <div className="flex flex-col">
+                    <h4 className="text-center">Dashboard</h4>
+                    <NavLink to="/dashboard/user/profile" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Profile</NavLink>
+                    <NavLink to="/dashboard/user/orders" className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100">Orders</NavLink>
                 </div>
             </div>
-
         </>
     );
 };

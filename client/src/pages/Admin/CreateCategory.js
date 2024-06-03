@@ -80,22 +80,22 @@ const CreateCategory = () => {
     return (
         <>
             <Layout title={'Admin Dashboard - Create Category'}>
-                <div className='container-fluid m-3 p-3'>
-                    <div className='row'>
-                        <div className='col-md-3'>
+                <div className='container mx-auto my-3 p-3'>
+                    <div className='flex'>
+                        <div className='w-1/4'>
                             <AdminMenu />
                         </div>
-                        <div className='col-md-9'>
-                            <div className='card w-75 p-3'>
-                                <h1>Manage Category</h1>
-                                <div className='p-3 w-50'>
+                        <div className='w-3/4'>
+                            <div className='card w-3/4 p-3'>
+                                <h1 className='text-2xl'>Manage Category</h1>
+                                <div className='p-3 w-1/2'>
                                     <CategoryForm
                                         handleSubmit={handleSubmit}
                                         value={name}
                                         setValue={setName}
                                     />
                                 </div>
-                                <div className='w-75'>
+                                <div className='w-3/4'>
                                     <table className="table">
                                         <thead>
                                             <tr>
