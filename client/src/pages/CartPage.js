@@ -87,8 +87,8 @@ const CartPage = () => {
     return (
         <Layout>
             <div className="container">
-                <div className="row">
-                    <div className="col-md-12">
+                <div className="grid grid-cols-1">
+                    <div className="col-span-1">
                         <h1 className="text-center bg-light p-2 mb-1">
                             {`Hello ${auth?.token && auth?.user?.name}`}
                         </h1>
@@ -100,11 +100,11 @@ const CartPage = () => {
                         </h4>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-8">
+                <div className="grid grid-cols-2">
+                    <div className="col-span-1">
                         {cart?.map((p) => (
-                            <div key={p._id} className="row mb-2 p-3 card flex-row">
-                                <div className="col-md-4">
+                            <div key={p._id} className="grid grid-cols-2 mb-2 p-3 card flex-row">
+                                <div className="col-span-1">
                                     <img
                                         src={`/api/v1/product/product-photo/${p._id}`}
                                         className="card-img-top"
@@ -113,7 +113,7 @@ const CartPage = () => {
                                         height={"100px"}
                                     />
                                 </div>
-                                <div className="col-md-8">
+                                <div className="col-span-1">
                                     <p>{p.name}</p>
                                     <p>{p.description.substring(0, 30)}</p>
                                     <p>Price : {p.price}</p>
@@ -127,7 +127,7 @@ const CartPage = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="col-md-4 text-center">
+                    <div className="col-span-1 text-center">
                         <h2>Cart Summary</h2>
                         <p>Total | Checkout | Payment</p>
                         <hr />

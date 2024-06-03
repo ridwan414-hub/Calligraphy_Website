@@ -23,25 +23,25 @@ export const requireSignIn = (req, res, next) => {
         });
     }
 }
- 
-export const isAdmin =async (req, res, next) => {
+
+export const isAdmin = async (req, res, next) => {
     try {
-    const user = await userModel.findById(req.user._id);
-    if(user.role !== 1){
-        return res.status(400).send({
-            success: false,
-            message: 'Admin Access Denied'
-        });
+        const user = await userModel.findById(req.user._id);
+        if (user.role !== 1) {
+            return res.status(400).send({
+                success: false,
+                message: 'Admin Access Denied'
+            });
         }
-        else{
+        else {
             next();
         }
-} catch (error) {
-    console.error(`Error in isAdmin: ${error}`);
-    res.status(500).send({
-        success: false,
-        message: 'Error in isAdmin',
-        error
-    });
+    } catch (error) {
+        console.error(`Error in isAdmin: ${error}`);
+        res.status(500).send({
+            success: false,
+            message: 'Error in isAdmin',
+            error
+        });
+    }
 }
- }

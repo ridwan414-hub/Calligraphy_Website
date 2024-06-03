@@ -51,12 +51,12 @@ const Profile = () => {
     };
     return (
         <Layout title={"Your Profile"}>
-            <div className="container-fluid m-3 p-3">
-                <div className="row">
-                    <div className="col-md-3">
+            <div className="container mx-auto my-3 p-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="col-span-1">
                         <UserMenu />
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-span-2">
                         <div className="form-container ">
                             <form onSubmit={handleSubmit}>
                                 <h4 className="title">USER PROFILE</h4>

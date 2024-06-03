@@ -25,11 +25,11 @@ const Orders = () => {
         <>
             <Layout title={"Your Orders"}>
                 <div className="container-flui p-3 m-3 dashboard">
-                    <div className="row">
-                        <div className="col-md-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3">
+                        <div className="md:col-span-1">
                             <UserMenu />
                         </div>
-                        <div className="col-md-9">
+                        <div className="md:col-span-2">
                             <h1 className="text-center">All Orders</h1>
                             {orders?.map((o, i) => {
                                 return (

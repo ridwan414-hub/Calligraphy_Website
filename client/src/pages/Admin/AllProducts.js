@@ -24,13 +24,13 @@ const AllProducts = () => {
 
     return (
         <Layout>
-            <div className='row'>
-                <div className='col-md-3'>
+            <div className='flex'>
+                <div className='w-1/4'>
                     <AdminMenu />
                 </div>
-                <div className='col-md-9'>
+                <div className='w-3/4'>
                     <h1 className='text-center'>All Products List</h1>
-                    <div className='d-flex flex-wrap'>
+                    <div className='flex flex-wrap'>
                         {products?.map((p) => (
                             <Link to={`/dashboard/admin/product/${p.slug}`} key={p._id} className='product-link' >
 

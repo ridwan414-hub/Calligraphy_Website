@@ -35,14 +35,14 @@ const ProductDetails = () => {
     }
     return (
         <Layout title='Product Details'>
-            <div className='row container mt-2' >
-                <div className='col-md-6'>
+            <div className='grid grid-cols-2 container mt-2' >
+                <div className='col-span-1'>
                     <img src={`/api/v1/product/product-photo/${product._id}`} className="card-img-top" alt={product.name}
                         height={'300px'}
                         width={'350px'}
                     />
                 </div>
-                <div className='col-md-6 '>
+                <div className='col-span-1'>
                     <h1 className='text-center'>Product Details</h1>
                     <h6>Name :{product.name}</h6>
                     <h6>Description :{product.description}</h6>
@@ -54,11 +54,11 @@ const ProductDetails = () => {
                 </div>
             </div>
             <hr/>
-            <div className='row container'>
-                <div className='col-md-5'>
+            <div className='grid grid-cols-1 container'>
+                <div className='col-span-1'>
                     <h6>Similar Products</h6>
                     {similarProducts.length === 0 && <p className='text-center'>No similar products found</p>}
-                    <div className='d-flex flex-wrap'>
+                    <div className='flex flex-wrap'>
                         {similarProducts?.map((p) => (
 
                             <div key={p._id} className="card m-2" style={{ width: '18rem' }}>

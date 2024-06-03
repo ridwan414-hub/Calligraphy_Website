@@ -42,11 +42,11 @@ const AdminOrders = () => {
     };
     return (
         <Layout title={"All Orders Data"}>
-            <div className="row dashboard">
-                <div className="col-md-3">
+            <div className="grid grid-cols-3">
+                <div className="col-span-3 md:col-span-1">
                     <AdminMenu />
                 </div>
-                <div className="col-md-9">
+                <div className="col-span-3 md:col-span-2">
                     <h1 className="text-center">All Orders</h1>
                     {orders?.map((o, i) => {
                         return (
