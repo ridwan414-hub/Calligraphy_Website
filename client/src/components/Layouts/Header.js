@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/auth';
 import toast from 'react-hot-toast';
 import SearchInput from '../Form/SearchInput';
@@ -20,7 +20,7 @@ const Header = () => {
         localStorage.removeItem('auth');
         toast.success('Logged out successfully');
     }
-    return (<div className="navbar bg-base-100">
+    return (<div className="navbar shadow-sm bg-base-100">
         <div className="navbar-start">
             <div className="dropdown">
                 <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
