@@ -20,7 +20,7 @@ const Header = () => {
         localStorage.removeItem('auth');
         toast.success('Logged out successfully');
     }
-    return (<div className="navbar shadow-sm bg-base-100">
+    return (<div className="navbar bg-gradient-to-r from-indigo-100 from-10% via-sky-100 via-30% to-emerald-100 to-90% shadow-sm opacity-90">
         <div className="navbar-start">
             <div className="dropdown">
                 <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -39,10 +39,13 @@ const Header = () => {
                     <li><NavLink to='/about'>About</NavLink></li>
                 </ul>
             </div>
-            <NavLink className="btn btn-ghost text-xl">daisyUI</NavLink>
+            <NavLink className="btn btn-ghost lg:text-xl sm:text-sm flex flex-shrink">
+                <img className="w-12 h-12 mt-[-9px] sm:w-16 sm:h-16 sm:mx-auto rounded-full" src='https://img.freepik.com/premium-vector/art-gallery-logo-design_92167-616.jpg?w=740' alt='logo' />
+                <h1 className='mb-2'>Artwork Gallery</h1>
+            </NavLink>
         </div>
         <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1">
+            <ul className="menu menu-horizontal flex gap-1 px-1">
                 <li><NavLink to='/'>Home</NavLink></li>
                 <li>
                     <details>
@@ -58,7 +61,7 @@ const Header = () => {
                 <SearchInput />
             </ul>
         </div>
-        <div className="navbar-end gap-4">
+        <div className="navbar-end flex flex-wrap gap-4">
             <ul>
                 <li className="flex items-center">
                     <Badge count={cart?.length} showZero>
@@ -67,17 +70,24 @@ const Header = () => {
                 </li>
             </ul>
             {!auth.user ? (
-                <ul className='flex'>
+                <ul className='flex flex-wrap gap-2 flex-shrink justify-end'>
                     <li>
-                        <NavLink to='/register' className="btn text-gray-700 hover:text-gray-900" >Register</NavLink>
+                        <NavLink to='/register' className="btn btn-outline border-blue-600 text-gray-700 hover:text-white" >Register</NavLink>
                     </li>
                     <li>
-                        <NavLink to='/login' className="btn text-gray-700 hover:text-gray-900" >Login</NavLink>
+                        <NavLink to='/login' className="btn btn-outline border-red-500 text-gray-700 hover:text-white" >Login</NavLink>
                     </li>
-                </ul>) : (<ul className='menu menu-horizontal mx-4'>
+                </ul>) : (<ul className='menu menu-horizontal'>
                     <li>
                         <details>
-                            <summary>{auth?.user?.name}</summary>
+                            <summary>
+                                <div className="avatar placeholder">
+                                    <div className="bg-neutral text-neutral-content rounded-full w-8">
+                                        <span>{auth?.user?.name.split('')[0] + auth?.user?.name.split('')[1] }</span>
+                                    </div>
+                                </div> 
+                                {auth?.user?.name}
+                            </summary>
                             <ul className="absolute">
                                 <li><NavLink to={`/dashboard/${auth?.user?.role === 1 ? 'admin' : 'user'}`} >Dashboard</NavLink></li>
                                 <li ><NavLink to='/login' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" onClick={handleLogOut}>Logout</NavLink></li>
@@ -87,83 +97,6 @@ const Header = () => {
                 </ul>)}
         </div>
     </div>)
-    // return (
-    //     <>
-    //         <nav className="flex justify-between bg-body-tertiary">
-    //             <div className="container-fluid">
-    //                 <Link to='/' className="text-xl font-bold"> 🛒Artwork Gallery</Link>
-    //                 <button className="flex items-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-    //                     <span className="w-6 h-6" />
-    //                 </button>
-    //                 <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-    //                     <ul className="flex space-x-4 ms-auto mb-2 mb-lg-0">
-    //                         <SearchInput />
-    //                         <li className="flex items-center">
-    //                             <NavLink
-    //                                 to='/' className="text-gray-700 hover:text-gray-900"
-    //                             >Home
-    //                             </NavLink>
-    //                         </li>
-    //                         <li className="relative">
-    //                             <Link
-    //                                 className="cursor-pointer"
-    //                                 to={"/categories"}
-    //                                 data-bs-toggle="dropdown"
-    //                             >
-    //                                 Categories
-    //                             </Link>
-    //                             <ul className="absolute hidden">
-    //                                 <li>
-    //                                     <Link className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" to={"/categories"}>
-    //                                         All Categories
-    //                                     </Link>
-    //                                 </li>
-    //                                 {categories?.map((c) => (
-    //                                     <li key={c._id}>
-    //                                         <Link
-    //                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-    //                                             to={`/category/${c.slug}`}
-    //                                         >
-    //                                             {c.name}
-    //                                         </Link>
-    //                                     </li>
-    //                                 ))}
-    //                             </ul>
-    //                         </li>
-
-    //                         {!auth.user ? (<>
-    //                             <li className="flex items-center">
-    //                                 <NavLink to='/register' className="text-gray-700 hover:text-gray-900" >Register</NavLink>
-    //                             </li>
-    //                             <li className="flex items-center">
-    //                                 <NavLink to='/login' className="text-gray-700 hover:text-gray-900" >Login</NavLink>
-    //                             </li>
-    //                         </>) : (<>
-    //                             <li className="relative">
-    //                                 <Link className="cursor-pointer" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    //                                     {auth?.user?.name}
-    //                                 </Link>
-    //                                 <ul className="absolute hidden">
-    //                                     <li><NavLink to={`/dashboard/${auth?.user?.role === 1 ? 'admin' : 'user'}`} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Dashboard</NavLink></li>
-    //                                     <li ><NavLink to='/login' className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" onClick={handleLogOut}>Logout</NavLink></li>
-    //                                 </ul>
-    //                             </li>
-    //                         </>)}
-
-    //                         <li className="flex items-center">
-    //                             <Badge count={cart?.length} showZero>
-    //                                 <NavLink to='/cart' className="text-gray-700 hover:text-gray-900">Cart</NavLink>
-
-    //                             </Badge>
-    //                         </li>
-
-    //                     </ul>
-    //                 </div>
-    //             </div>
-    //         </nav>
-
-    //     </>
-    // );
 };
 
 export default Header;
