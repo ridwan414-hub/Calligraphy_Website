@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Checkbox, Radio } from 'antd';
 import { Prices } from '../../Prices';
 import toast from 'react-hot-toast';
+import Skeleton from '../../Skeleton';
 
 const HomepageProductsFilteringSection = () => {
   const navigate = useNavigate();
@@ -144,41 +145,49 @@ const HomepageProductsFilteringSection = () => {
         <div className="col-md-9 offset-1">
           <h1 className="text-center">All Products</h1>
           <div className="flex flex-wrap">
-            {products?.map((p) => (
-              <div className="card m-2" style={{ width: '18rem' }} key={p._id}>
-                <img
-                  src={`/api/v1/product/product-photo/${p._id}`}
-                  className="card-img-top img-fluid"
-                  alt={p.name}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{p.name}</h5>
-                  <p className="card-text">
-                    {p.description.substring(0, 30)}...
-                  </p>
-                  <p className="card-text"> Tk {p.price}</p>
-                  <button
-                    className="btn btn-primary ms-1"
-                    onClick={() => navigate(`/product/${p.slug}`)}
-                  >
-                    More Details
-                  </button>
-                  <button
-                    className="btn btn-secondary ms-1"
-                    onClick={() => {
-                      setCart([...cart, p]);
-                      localStorage.setItem(
-                        'cart',
-                        JSON.stringify([...cart, p])
-                      );
-                      toast.success('Item Added to cart');
-                    }}
-                  >
-                    ADD TO CART
-                  </button>
+            {!products ? (
+              <Skeleton />
+            ) : (
+              products.map((p) => (
+                <div
+                  className="card m-2"
+                  style={{ width: '18rem' }}
+                  key={p._id}
+                >
+                  <img
+                    src={`/api/v1/product/product-photo/${p._id}`}
+                    className="card-img-top img-fluid"
+                    alt={p.name}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title">{p.name}</h5>
+                    <p className="card-text">
+                      {p.description.substring(0, 30)}...
+                    </p>
+                    <p className="card-text"> Tk {p.price}</p>
+                    <button
+                      className="btn btn-primary ms-1"
+                      onClick={() => navigate(`/product/${p.slug}`)}
+                    >
+                      More Details
+                    </button>
+                    <button
+                      className="btn btn-secondary ms-1"
+                      onClick={() => {
+                        setCart([...cart, p]);
+                        localStorage.setItem(
+                          'cart',
+                          JSON.stringify([...cart, p])
+                        );
+                        toast.success('Item Added to cart');
+                      }}
+                    >
+                      ADD TO CART
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
           <div className="m-2 p-3">
             {products && products.length < total && (
