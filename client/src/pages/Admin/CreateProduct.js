@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../../components/Layouts/Layout';
-import AdminMenu from '../../components/Layouts/AdminMenu';
+// import Layout from '../../components/Layouts/Layout';
+// import AdminMenu from '../../components/Layouts/AdminMenu';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Select } from 'antd'
@@ -31,7 +31,7 @@ const CreateProduct = () => {
             productData.append('photo', photo)
             productData.append('category', category)
 
-            const { data } =await axios.post('/api/v1/product/create-product', productData)
+            const { data } = await axios.post('/api/v1/product/create-product', productData)
             if (data?.success) {
                 toast.success('Product created successfully')
                 navigate('/dashboard/admin/products')
@@ -61,117 +61,108 @@ const CreateProduct = () => {
     }, [])
 
     return (
-        <Layout title={"Dashboard - Create Product"}>
-            <div className="container mx-auto my-3 p-3">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="col-span-1">
-                        <AdminMenu />
-                    </div>
-                    <div className="col-span-2">
-                        <h1 className="text-3xl font-bold">Create Product</h1>
-                        <div className="m-1 w-3/4">
-                            <Select
-                                variant={false}
-                                placeholder="Select a category"
-                                size="large"
-                                showSearch
-                                className="form-select mb-3"
-                                onChange={(value) => {
-                                    setCategory(value);
-                                }}
-                            >
-                                {categories?.map((c) => (
-                                    <Option key={c._id} value={c._id}>
-                                        {c.name}
-                                    </Option>
-                                ))}
-                            </Select>
-                            <div className="mb-3">
-                                <label className="btn btn-outline-secondary col-span-12">
-                                    {photo ? photo.name : "Upload Photo"}
-                                    <input
-                                        type="file"
-                                        name="photo"
-                                        accept="image/*"
-                                        onChange={(e) => setPhoto(e.target.files[0])}
-                                        hidden
-                                    />
-                                </label>
-                            </div>
-                            <div className="mb-3">
-                                {photo && (
-                                    <div className="text-center">
-                                        <img
-                                            src={URL.createObjectURL(photo)}
-                                            alt="product_photo"
-                                            height={"200px"}
-                                            className="img img-responsive"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="mb-3">
-                                <input
-                                    type="text"
-                                    value={name}
-                                    placeholder="write a name"
-                                    className="form-control"
-                                    onChange={(e) => setName(e.target.value)}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <textarea
-                                    type="text"
-                                    value={description}
-                                    placeholder="write a description"
-                                    className="form-control"
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="mb-3">
-                                <input
-                                    type="number"
-                                    value={price}
-                                    placeholder="write a Price"
-                                    className="form-control"
-                                    onChange={(e) => setPrice(e.target.value)}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <input
-                                    type="number"
-                                    value={quantity}
-                                    placeholder="write a quantity"
-                                    className="form-control"
-                                    onChange={(e) => setQuantity(e.target.value)}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <Select
-                                    variant={false}
-                                    placeholder="Select Shipping "
-                                    size="large"
-                                    showSearch
-                                    className="form-select mb-3"
-                                    onChange={(value) => {
-                                        setShipping(value);
-                                    }}
-                                >
-                                    <Option value="0">No</Option>
-                                    <Option value="1">Yes</Option>
-                                </Select>
-                            </div>
-                            <div className="mb-3">
-                                <button className="btn btn-primary" onClick={handleCreate}>
-                                    CREATE PRODUCT
-                                </button>
-                            </div>
+        <div>
+            <h1 className="text-3xl font-bold">Create Product</h1>
+            <div className='flex flex-col mx-auto bg-slate-50 w-1/2'>
+                <Select
+                    variant={false}
+                    placeholder="Select a category"
+                    size="large"
+                    showSearch
+                    className=" mb-3"
+                    onChange={(value) => {
+                        setCategory(value);
+                    }}
+                >
+                    {categories?.map((c) => (
+                        <Option key={c._id} value={c._id}>
+                            {c.name}
+                        </Option>
+                    ))}
+                </Select>
+                <div className="mb-3">
+                    <label className="btn btn-outline-secondary">
+                        {photo ? photo.name : "Upload Photo"}
+                        <input
+                            type="file"
+                            name="photo"
+                            accept="image/*"
+                            onChange={(e) => setPhoto(e.target.files[0])}
+                            hidden
+                        />
+                    </label>
+                </div>
+                <div className="mb-3">
+                    {photo && (
+                        <div className="text-center">
+                            <img
+                                src={URL.createObjectURL(photo)}
+                                alt="product_photo"
+                                height={"200px"}
+                                className="img img-responsive"
+                            />
                         </div>
-                    </div>
+                    )}
+                </div>
+                <div className="mb-3">
+                    <input
+                        type="text"
+                        value={name}
+                        placeholder="write a name"
+                        className="w-full border-red-200"
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <div className="mb-3">
+                    <textarea
+                        type="text"
+                        value={description}
+                        placeholder="write a description"
+                        className="w-full border-red-200"
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <input
+                        type="number"
+                        value={price}
+                        placeholder="write a Price"
+                        className="w-full border-red-200"
+                        onChange={(e) => setPrice(e.target.value)}
+                    />
+                </div>
+                <div className="mb-3">
+                    <input
+                        type="number"
+                        value={quantity}
+                        placeholder="write a quantity"
+                        className="w-full border-red-200"
+                        onChange={(e) => setQuantity(e.target.value)}
+                    />
+                </div>
+                <div className="mb-3">
+                    <Select
+                        variant={false}
+                        placeholder="Select Shipping "
+                        size="large"
+                        showSearch
+                        className="form-select mb-3"
+                        onChange={(value) => {
+                            setShipping(value);
+                        }}
+                    >
+                        <Option value="0">No</Option>
+                        <Option value="1">Yes</Option>
+                    </Select>
+                </div>
+                <div className="mb-3">
+                    <button className="btn btn-primary" onClick={handleCreate}>
+                        CREATE PRODUCT
+                    </button>
                 </div>
             </div>
-        </Layout>
+        </div>
     );
 };
 

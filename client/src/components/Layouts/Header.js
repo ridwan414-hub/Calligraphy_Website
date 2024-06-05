@@ -20,7 +20,7 @@ const Header = () => {
         localStorage.removeItem('auth');
         toast.success('Logged out successfully');
     }
-    return (<div className="navbar bg-gradient-to-r from-indigo-100 from-10% via-sky-100 via-30% to-emerald-100 to-90% shadow-sm opacity-90">
+    return (<div className="navbar bg-gradient-to-r from-indigo-100 from-10% via-sky-100 via-30% to-emerald-100 to-90% shadow-sm opacity-90 ">
         <div className="navbar-start">
             <div className="dropdown">
                 <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -45,7 +45,7 @@ const Header = () => {
             </NavLink>
         </div>
         <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal flex gap-1 px-1">
+            <ul className="menu menu-horizontal flex gap-1 px-1 ">
                 <li><NavLink to='/'>Home</NavLink></li>
                 <li>
                     <details>

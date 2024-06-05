@@ -1,27 +1,24 @@
 import React from 'react';
-import Layout from '../../components/Layouts/Layout';
 import AdminMenu from '../../components/Layouts/AdminMenu';
 import { useAuth } from '../../context/auth';
+import { Outlet } from 'react-router-dom';
+import Header from '../../components/Layouts/Header';
 
 const AdminDashboard = () => {
-    const [auth]=useAuth()
+    const [auth] = useAuth()
     return (
-        <Layout title={'Admin Dashboard - Ecommerce App'}>
-            <div className='container mx-auto my-3 px-3'>
-                <div className='flex'>
-                    <div className='w-1/4'>
-                        <AdminMenu />
-                    </div>
-                    <div className='w-3/4'>
-                        <div className='card w-3/4 p-3'>
-                            <h3>Admin Name:{auth?.user?.name }</h3>
-                            <h3>Admin Email:{auth?.user?.email }</h3>
-                            <h3>Admin Phone:{auth?.user?.phone }</h3>
-                        </div>
-                    </div>
-                </div>
+       <> <Header/>
+        <div className='flex'>
+            <AdminMenu />
+            <div className="h-screen flex-1 p-7">
+                <h1 className="text-2xl font-semibold ">Admin Dashboard</h1>
+                <h3>Admin Name:{auth?.user?.name}</h3>
+                <h3>Admin Email:{auth?.user?.email}</h3>
+                <h3>Admin Phone:{auth?.user?.phone}</h3>
+                <Outlet />
             </div>
-        </Layout>
+            </div>
+        </>
     );
 };
 
