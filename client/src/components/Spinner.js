@@ -6,8 +6,8 @@ const Spinner = ({ path = 'login', errorMessage = '', successMessage = '' }) => 
     const [count, setCount] = useState(3)
     const navigate = useNavigate()
     const location = useLocation()
-    const notifyError = () => toast.error(`${errorMessage}`)
-    const notifySuccess = () => toast.success(`${successMessage}`)
+    const notifyError = () => toast.error(errorMessage)
+    const notifySuccess = () => toast.success(successMessage)
 
 
     useEffect(() => {

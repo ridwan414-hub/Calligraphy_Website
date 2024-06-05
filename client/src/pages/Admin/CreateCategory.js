@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Layout from '../../components/Layouts/Layout'
-import AdminMenu from '../../components/Layouts/AdminMenu'
+// import Layout from '../../components/Layouts/Layout'
+// import AdminMenu from '../../components/Layouts/AdminMenu'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import CategoryForm from '../../components/Form/CategoryForm'
@@ -78,59 +78,46 @@ const CreateCategory = () => {
     }, [])
 
     return (
-        <>
-            <Layout title={'Admin Dashboard - Create Category'}>
-                <div className='container mx-auto my-3 p-3'>
-                    <div className='flex'>
-                        <div className='w-1/4'>
-                            <AdminMenu />
-                        </div>
-                        <div className='w-3/4'>
-                            <div className='card w-3/4 p-3'>
-                                <h1 className='text-2xl'>Manage Category</h1>
-                                <div className='p-3 w-1/2'>
-                                    <CategoryForm
-                                        handleSubmit={handleSubmit}
-                                        value={name}
-                                        setValue={setName}
-                                    />
-                                </div>
-                                <div className='w-3/4'>
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {categories?.map((c) => (
+        <div>
+            <h1 className='text-2xl'>Manage Category</h1>
+            <div className='p-3 w-1/2'>
+                <CategoryForm
+                    handleSubmit={handleSubmit}
+                    value={name}
+                    setValue={setName}
+                />
+            </div>
+            <div className='w-3/4'>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {categories?.map((c) => (
 
-                                                <tr key={c._id}>
-                                                    <td>{c.name}</td>
-                                                    <td >
-                                                        <button className='btn btn-primary ms-2' onClick={() => {
-                                                            setVisible(true)
-                                                            setUpdatedName(c.name)
-                                                            setSelected(c)
-                                                        }}>Edit</button>
-                                                        <button className='btn btn-danger ms-2' onClick={() => handleDelete(c._id)}>Delete</button>
-                                                    </td>
-                                                </tr>
+                            <tr key={c._id}>
+                                <td>{c.name}</td>
+                                <td >
+                                    <button className='btn btn-primary ms-2' onClick={() => {
+                                        setVisible(true)
+                                        setUpdatedName(c.name)
+                                        setSelected(c)
+                                    }}>Edit</button>
+                                    <button className='btn btn-danger ms-2' onClick={() => handleDelete(c._id)}>Delete</button>
+                                </td>
+                            </tr>
 
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <Modal onCancel={() => setVisible(false)} footer={null} open={visible}>
-                                    <CategoryForm handleSubmit={handleUpdate} value={updatedName} setValue={setUpdatedName} />
-                                </Modal>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Layout>
-        </>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <Modal onCancel={() => setVisible(false)} footer={null} open={visible}>
+                <CategoryForm handleSubmit={handleUpdate} value={updatedName} setValue={setUpdatedName} />
+            </Modal>
+        </div>
     )
 }
 

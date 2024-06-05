@@ -50,13 +50,14 @@ function App() {
         </Route>
 
         <Route path='/dashboard' element={<AdminRoute />}>
-          <Route path="admin" element={<AdminDashboard />} />
-          <Route path="admin/create-category" element={<CreateCategory />} />
-          <Route path="admin/create-product" element={<CreateProduct />} />
-          <Route path="admin/product/:slug" element={<UpdateProduct />} />
-          <Route path="admin/products" element={<AllProducts />} />
-          <Route path="admin/users" element={<Users />} />
-          <Route path="admin/orders" element={<AdminOrders />} />
+          <Route path="admin" element={<AdminDashboard />} >
+            <Route path="create-category" element={<CreateCategory />} />
+            <Route path="create-product" element={<CreateProduct />} />
+            <Route path="product/:slug" element={<UpdateProduct />} />
+            <Route path="products" element={<AllProducts />} />
+            <Route path="users" element={<Users />} />
+            <Route path="orders" element={<AdminOrders />} />
+          </Route>
         </Route>
 
         <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -43,7 +43,7 @@ const Layout = ({
             <TopBanner/>
             <Header />
             <main
-                className='mx-auto  px-4 my-0 max-w-screen-lg  flex flex-col min-h-screen'>
+                className='mx-auto  px-4 my-0 max-w-screen-lg flex flex-col min-h-screen'>
                 {children ? children : <Skeleton />}
             </main>
             <Footer />

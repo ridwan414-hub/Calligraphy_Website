@@ -12,7 +12,6 @@ export default function LoginForm() {
     const navigate = useNavigate();
     const location = useLocation();
 
-
     // form function
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,7 +21,7 @@ export default function LoginForm() {
                 password,
             });
             if (res && res.data.success) {
-                toast.success(res.data && res.data.message);
+                toast.success(res.data.message || "Login successful");
                 setAuth({
                     ...auth,
                     user: res.data.user,
@@ -35,7 +34,7 @@ export default function LoginForm() {
             }
         } catch (error) {
             console.log(error);
-            toast.error("Something went wrong");
+            toast.error(error.response.data.message || "An error occurred. Please try again.");
         }
     };
     return (
@@ -67,6 +66,7 @@ export default function LoginForm() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Enter Your Email"
                                 required
+                                autoFocus
                                 className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>

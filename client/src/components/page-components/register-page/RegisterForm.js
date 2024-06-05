@@ -14,6 +14,7 @@ const RegisterForm = () => {
     const [answer, setAnswer] = useState("");
     const [ok, setOk] = useState(false)
 
+
     // form function
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,14 +31,15 @@ const RegisterForm = () => {
             setLoading(false);
             if (res && res.data.success) {
                 setOk(true)
-                // navigate("/login");
                 toast.success(res.data && res.data.message);
             } else {
                 toast.error(res.data.message);
             }
         } catch (error) {
             console.log(error);
-            toast.error("Something went wrong");
+            setLoading(false);
+            toast.error(error.response.data.message || "An error occurred. Please try again.");
+
         }
     };
 

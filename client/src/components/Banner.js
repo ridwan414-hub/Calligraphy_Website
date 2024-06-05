@@ -2,19 +2,97 @@ import React from 'react';
 
 const Banner = () => {
     return (
-        <div className="container col-xxl-8 px-4 py-5">
-            <div className="row flex-lg-row-reverse align-items-center g-5 py-5">
-                <div className="col-10 col-sm-8 col-lg-6">
-                    <img src="/api/v1/product/product-photo/663a84d7f95207239bfc7254" className="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width={700} height={500} loading="lazy" />
+        <div className="bg-transparent glass  py-6 px-4 sm:p-6 md:py-10 md:px-8">
+            <div className="max-w-4xl mx-auto grid grid-cols-1 lg:max-w-5xl lg:gap-x-20 lg:grid-cols-2">
+                <div className="relative p-3 col-start-1 row-start-1 flex flex-col-reverse rounded-lg bg-gradient-to-t from-black/75 via-black/0 sm:bg-none sm:row-start-2 sm:p-0 lg:row-start-1">
+                    <h1 className="text-sm mb-3 leading-4 font-bold text-black">
+                        The Artwork Gallery
+                    </h1>
                 </div>
-                <div className="col-lg-6">
-                    <h1 className="display-5 fw-bold text-body-emphasis lh-1 mb-3">Responsive left-aligned hero with image</h1>
-                    <p className="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
-                    <div className="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button type="button" className="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
-                        <button type="button" className="btn btn-outline-secondary btn-lg px-4">Default</button>
-                    </div>
+                <div className="grid gap-4 col-start-1 col-end-3 row-start-1 sm:mb-6 sm:grid-cols-4 lg:gap-6 lg:col-start-2 lg:row-end-6 lg:row-span-6 lg:mb-0">
+                    <img
+                        src='/api/v1/product/product-photo/66579f34a1ca081b353966ff'
+                        alt='pictureId-1'
+                        className="w-full h-60 object-cover rounded-lg sm:h-52 sm:col-span-2 lg:col-span-full"
+                        loading="lazy"
+                        />
+                    <img
+                        src='/api/v1/product/product-photo/663a86a0f95207239bfc7275'
+                        alt='pictureId-2'
+                        className="hidden w-full h-52 object-cover rounded-lg sm:block sm:col-span-2 md:col-span-1 lg:row-start-2 lg:col-span-2 lg:h-32"
+                        loading="lazy"
+                        />
+                    <img
+                        src='/api/v1/product/product-photo/663a8571f95207239bfc7262'
+                        alt='pictureId-3'
+                        className="hidden w-full h-52 object-cover rounded-lg md:block lg:row-start-2 lg:col-span-2 lg:h-32"
+                        loading="lazy"
+                    />
                 </div>
+                <dl className="mt-4 text-xs font-medium flex items-center row-start-2 sm:mt-1 sm:row-start-3 md:mt-2.5 lg:row-start-2">
+                    <dt className="sr-only">Reviews</dt>
+                    <dd className="flex items-center">
+                        <svg
+                            width={24}
+                            height={24}
+                            fill="none"
+                            aria-hidden="true"
+                            className="mr-1 stroke-current dark:stroke-indigo-500"
+                        >
+                            <path
+                                d="m12 5 2 5h5l-4 4 2.103 5L12 16l-5.103 3L9 14l-4-4h5l2-5Z"
+                                strokeWidth={2}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                        <span>
+                            4.89 <span className="font-normal">(128)</span>
+                        </span>
+                    </dd>
+                    <dt className="sr-only">Location</dt>
+                    <dd className="flex items-center">
+                        <svg
+                            width={2}
+                            height={2}
+                            aria-hidden="true"
+                            fill="currentColor"
+                            className="mx-3 text-slate-300"
+                        >
+                            <circle cx={1} cy={1} r={1} />
+                        </svg>
+                        <svg
+                            width={24}
+                            height={24}
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="mr-1 text-slate-400 dark:text-slate-500"
+                            aria-hidden="true"
+                        >
+                            <path d="M18 11.034C18 14.897 12 19 12 19s-6-4.103-6-7.966C6 7.655 8.819 5 12 5s6 2.655 6 6.034Z" />
+                            <path d="M14 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
+                        </svg>
+                        Dhaka,Bangladesh
+                    </dd>
+                </dl>
+                <div className="mt-4 col-start-1 row-start-3 self-center sm:mt-0 sm:col-start-2 sm:row-start-2 sm:row-span-2 lg:mt-6 lg:col-start-1 lg:row-start-3 lg:row-end-4">
+                    <button
+                        type="button"
+                        className="bg-indigo-600 text-white text-sm leading-6 font-medium py-2 px-3 rounded-lg"
+                    >
+                        BE PART OF IT
+                    </button>
+                </div>
+                <p className="mt-4 text-sm leading-6 col-start-1 sm:col-span-2 lg:mt-6 lg:row-start-4 lg:col-span-1">
+                    Our organization relies on the generosity of donors and volunteers who
+                    share our vision of a better, more equitable world. Together, we can
+                    create lasting change and build a brighter future for everyone. Join
+                    us in our mission. Learn more about our work, get involved, and see
+                    how you can make a difference.
+                </p>
             </div>
         </div>
 

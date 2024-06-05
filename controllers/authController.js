@@ -36,9 +36,15 @@ export const registerController = async (req, res, next) => {
         const emailData = {
             email,
             subject: 'Account Activation Mail',
-            html: `<h2>Hello ${name}</h2>
-            <p>Please click here to <a href="${process.env.CLIENT_URL}user/activate/${token}" target="_blanck">activate your account</a></p>
-            `
+            html: `
+    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+        <h2 style="color: #4CAF50;">Hello ${name}</h2>
+        <p>Please click the button below to activate your account.</p>
+        <a href="${process.env.CLIENT_URL}user/activate/${token}" target="_blank" style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; margin: 10px 0; display: inline-block;">Activate your account</a>
+        <p>If the button doesn't work, you can also copy and paste the following link into your browser:</p>
+        <p><a href="${process.env.CLIENT_URL}user/activate/${token}" target="_blank">${process.env.CLIENT_URL}user/activate/${token}</a></p>
+    </div>
+    `
         }
         try { await emailWithNodeMailer(emailData) }
         catch (emailError) {
@@ -106,7 +112,6 @@ export const activateAccountController = async (req, res) => {
 
     }
 }
-
 export const loginController = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -127,7 +132,7 @@ export const loginController = async (req, res) => {
         if (!isMatch) {
             return res.status(400).send({
                 success: false,
-                message: 'Invalid mail or password'
+                message: 'Incorrect mail or password'
             });
         }
         const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -175,9 +180,15 @@ export const forgotPasswordControllerByMail = async (req, res) => {
         const emailData = {
             email,
             subject: 'Reset Password Mail',
-            html: `<h2>Hello ${user.name}</h2>
-            <p>Please click here to <a href="${process.env.CLIENT_URL}user/reset-password/${token}" target="_blanck">Reset Your Password</a></p>
-            `
+            html: `
+    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+        <h2 style="color: #4CAF50;">Hello ${user.name}</h2>
+        <p>Please click the button below to reset your password.</p>
+        <a href="${process.env.CLIENT_URL}user/reset-password/${token}" target="_blank" style="background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; margin: 10px 0; display: inline-block;">Reset Your Password</a>
+        <p>If the button doesn't work, you can also copy and paste the following link into your browser:</p>
+        <p><a href="${process.env.CLIENT_URL}user/reset-password/${token}" target="_blank">${process.env.CLIENT_URL}user/reset-password/${token}</a></p>
+    </div>
+    `
         }
         try { await emailWithNodeMailer(emailData) }
         catch (emailError) {
@@ -353,7 +364,6 @@ export const getAllUsersController = async (req, res) => {
         });
     }
 }
-
 export const testController = async (req, res) => {
     try {
         res.status(200).send({

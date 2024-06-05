@@ -6,6 +6,7 @@ import { Checkbox, Radio } from 'antd';
 import { Prices } from '../../Prices';
 import toast from 'react-hot-toast';
 import Skeleton from '../../Skeleton';
+import Card from '../../Card';
 
 const HomepageProductsFilteringSection = () => {
   const navigate = useNavigate();
@@ -142,50 +143,14 @@ const HomepageProductsFilteringSection = () => {
             </button>
           </div>
         </div>
-        <div className="col-md-9 offset-1">
+        <div className="">
           <h1 className="text-center">All Products</h1>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap justify-evenly gap-2">
             {!products ? (
               <Skeleton />
             ) : (
-              products.map((p) => (
-                <div
-                  className="card m-2"
-                  style={{ width: '18rem' }}
-                  key={p._id}
-                >
-                  <img
-                    src={`/api/v1/product/product-photo/${p._id}`}
-                    className="card-img-top img-fluid"
-                    alt={p.name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{p.name}</h5>
-                    <p className="card-text">
-                      {p.description.substring(0, 30)}...
-                    </p>
-                    <p className="card-text"> Tk {p.price}</p>
-                    <button
-                      className="btn btn-primary ms-1"
-                      onClick={() => navigate(`/product/${p.slug}`)}
-                    >
-                      More Details
-                    </button>
-                    <button
-                      className="btn btn-secondary ms-1"
-                      onClick={() => {
-                        setCart([...cart, p]);
-                        localStorage.setItem(
-                          'cart',
-                          JSON.stringify([...cart, p])
-                        );
-                        toast.success('Item Added to cart');
-                      }}
-                    >
-                      ADD TO CART
-                    </button>
-                  </div>
-                </div>
+                products.map((p) => (
+                <Card key={p._id} product={p} />
               ))
             )}
           </div>

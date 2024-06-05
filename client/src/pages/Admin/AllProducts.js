@@ -23,12 +23,8 @@ const AllProducts = () => {
     }, [])
 
     return (
-        <Layout>
             <div className='flex'>
-                <div className='w-1/4'>
-                    <AdminMenu />
-                </div>
-                <div className='w-3/4'>
+                <div className=''>
                     <h1 className='text-center'>All Products List</h1>
                     <div className='flex flex-wrap'>
                         {products?.map((p) => (
@@ -46,7 +42,6 @@ const AllProducts = () => {
                     </div>
                 </div>
             </div>
-        </Layout>
     );
 };
 
