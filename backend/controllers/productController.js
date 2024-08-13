@@ -279,11 +279,7 @@ export const searchProductController = async (req, res) => {
             ]
         }).select('-photo');
         res.status(200).json(products);
-        // res.status(200).send({
-        //     success: true,
-        //     message: 'Products fetched successfully',
-        //     products,
-        // });
+
     } catch (error) {
         console.error(`Error in searchProductController: ${error}`);
         res.status(500).send({
