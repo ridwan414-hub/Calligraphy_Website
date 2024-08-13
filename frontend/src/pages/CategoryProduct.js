@@ -2,23 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Layout from "../components/Layouts/Layout";
+import Loader from "../components/Loader";
+import Card from "../components/Card";
 const CategoryProduct = () => {
     const params = useParams();
-    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (params?.slug) getPrductsByCat();
+        if (params.slug) getPrductsByCat();
         // eslint-disable-next-line
     }, [params?.slug]);
     const getPrductsByCat = async () => {
         try {
+            setLoading(true)
             const { data } = await axios.get(
                 `/api/v1/product/product-category/${params.slug}`
             );
-            setProducts(data?.products);
-            setCategory(data?.category);
+            setLoading(false)
+            setProducts(data.products);
+            setCategory(data.category);
         } catch (error) {
             console.log(error);
         }
@@ -26,40 +30,16 @@ const CategoryProduct = () => {
 
     return (
         <Layout title={`${category?.name} Category`}>
-            <div className="container mt-3">
-                <h4 className="text-center">Category - {category?.name}</h4>
-                <h6 className="text-center">{products?.length} result found </h6>
-                <div className="grid grid-cols-3 gap-4">
-                    {products?.map((p) => (
-                        <div
-                            className="card m-2"
-                            style={{ width: "18rem" }}
-                            key={p._id}
-                        >
-                            <img
-                                src={`/api/v1/product/product-photo/${p._id}`}
-                                className="card-img-top"
-                                alt={p.name}
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">{p.name}</h5>
-                                <p className="card-text">
-                                    {p.description.substring(0, 30)}...
-                                </p>
-                                <p className="card-text"> $ {p.price}</p>
-                                <button
-                                    className="btn btn-primary ms-1"
-                                    onClick={() => navigate(`/product/${p.slug}`)}
-                                >
-                                    More Details
-                                </button>
-                                <button className="btn btn-secondary ms-1">
-                                    ADD TO CART
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+            <div className="bg-transparent glass my-4 p-4">
+                <h4 className="text-4xl text-center">Category - {category?.name}</h4>
+                <h6 className="text-center">{products?.length} product found </h6>
+                {loading ? <Loader /> :
+                    <div className="flex justify-center items-center flex-wrap gap-2">
+                        {products?.map((p) => (
+                            <Card key={p._id} product={p} />
+                        ))}
+                    </div>
+                }
             </div>
         </Layout>
     );

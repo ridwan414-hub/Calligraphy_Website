@@ -147,31 +147,32 @@ const HomepageProductsFilteringSection = () => {
         </div>
         {/* Products section */}
 
-        <div className="glass py-2 px-2 rounded-xl">
+        <div className="glass w-full py-2 px-2 rounded-xl">
           <h1 className="text-center text-3xl font-semibold py-8">All Products</h1>
-          {loading ? <Loader message={'Loading Products...'} /> : <>
-            <div className="flex flex-wrap justify-evenly gap-2">
-              {
-                products.map((p) => (
-                  <Card key={p._id} product={p} />
-                ))
-              }
-            </div>
-            <div className="m-2 p-3">
-              {products && products.length < total && (
-                <button
-                  className="btn btn-warning"
-                  style={{ display: buttonVisible ? 'block' : 'none' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setPage(page + 1);
-                  }}
-                >
-                  {loading ? 'Loading ...' : 'Load More'}
-                </button>
-              )}
-            </div>
-          </>
+          {loading ? <Loader message={'Loading Products...'} /> :
+            <>
+              <div className="flex flex-wrap justify-evenly gap-2">
+                {
+                  products.map((p) => (
+                    <Card key={p._id} product={p} />
+                  ))
+                }
+              </div>
+              <div className="m-2 p-3">
+                {products && products.length < total && (
+                  <button
+                    className="btn btn-warning"
+                    style={{ display: buttonVisible ? 'block' : 'none' }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPage(page + 1);
+                    }}
+                  >
+                    {loading ? 'Loading ...' : 'Load More'}
+                  </button>
+                )}
+              </div>
+            </>
           }
         </div>
       </div>
