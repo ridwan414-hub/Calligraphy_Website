@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { FaBoxOpen } from 'react-icons/fa';
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Layout from "../components/Layouts/Layout";
 import Loader from "../components/Loader";
@@ -30,16 +31,25 @@ const CategoryProduct = () => {
 
     return (
         <Layout title={`${category?.name} Category`}>
-            <div className="bg-transparent glass my-4 p-4">
-                <h4 className="text-4xl text-center">Category - {category?.name}</h4>
-                <h6 className="text-center">{products?.length} product found </h6>
-                {loading ? <Loader /> :
-                    <div className="flex justify-center items-center flex-wrap gap-2">
-                        {products?.map((p) => (
-                            <Card key={p._id} product={p} />
-                        ))}
+            <div className="glass rounded-lg shadow-lg my-8 p-6">
+                <div className="text-center mb-6 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-6 rounded-lg shadow-lg">
+                    <FaBoxOpen className="text-6xl text-white mx-auto mb-4" />
+                    <h4 className="text-4xl font-bold text-white mb-2">Category - {category?.name}</h4>
+                    <h6 className="text-lg text-white">{products?.length} product(s) found</h6>
+                </div>
+                {loading ? (
+                    <div className="flex justify-center items-center">
+                        <Loader />
                     </div>
-                }
+                ) : (
+                    <div className="flex justify-center items-center">
+                        <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {products?.map((p) => (
+                                <Card key={p._id} product={p} />
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </Layout>
     );

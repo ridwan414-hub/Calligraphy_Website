@@ -6,19 +6,19 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
         user: null,
-        token: '',
+        token: null,
     })
     //default axios
     axios.defaults.headers.common['Authorization'] = auth?.token;
 
-    useEffect(() => { 
+    useEffect(() => {
         const data = localStorage.getItem('auth');
         if (data) {
             const parsedData = JSON.parse(data);
             setAuth({
                 ...auth,
                 user: parsedData.user,
-                token: parsedData.token, 
+                token: parsedData.token,
             })
         }
         // eslint-disable-next-line
