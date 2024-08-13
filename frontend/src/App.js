@@ -16,8 +16,8 @@ import Users from "./pages/Admin/Users";
 import Profile from "./pages/user/Profile";
 import Orders from "./pages/user/Orders";
 
-import PrivateRoute from "./components/Routes/Private";
-import AdminRoute from "./components/Routes/AdminRoute";
+import PrivateRoute from "./Routes/Private";
+import AdminRoute from "./Routes/AdminRoute";
 import AllProducts from "./pages/Admin/AllProducts";
 import UpdateProduct from "./pages/Admin/UpdateProduct";
 import Search from "./pages/Search";
@@ -26,7 +26,7 @@ import Categories from "./pages/Categories";
 import CategoryProduct from "./pages/CategoryProduct";
 import CartPage from "./pages/CartPage";
 import AdminOrders from "./pages/Admin/AdminOrders";
-import ActivateUser from "./components/Routes/ActivateUser";
+import ActivateUser from "./Routes/ActivateUser";
 import ResetPassword from "./pages/Auth/ResetPassword";
 
 function App() {

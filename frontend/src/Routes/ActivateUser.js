@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import Spinner from "../Spinner";
+import Spinner from "../components/Spinner";
 
 export default function ActivateUser() {
     const [ok, setOk] = useState(false)
