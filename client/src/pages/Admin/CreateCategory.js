@@ -13,6 +13,20 @@ const CreateCategory = () => {
     const [updatedName, setUpdatedName] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const getAllCategories = useCallback(async () => {
+        setLoading(true);
+        try {
+            const { data } = await axios.get('/api/v1/category/get-categories');
+            if (data?.success) {
+                setCategories(data?.categories);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch categories");
+        } finally {
+            setLoading(false);
+        }
+    }, []);
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -31,7 +45,7 @@ const CreateCategory = () => {
         } finally {
             setLoading(false);
         }
-    }, [name]);
+    }, [name, getAllCategories]);
 
     const handleUpdate = useCallback(async (e) => {
         e.preventDefault();
@@ -53,7 +67,7 @@ const CreateCategory = () => {
         } finally {
             setLoading(false);
         }
-    }, [selected, updatedName]);
+    }, [selected, updatedName, getAllCategories]);
 
     const handleDelete = useCallback(async (id) => {
         setLoading(true);
@@ -71,22 +85,8 @@ const CreateCategory = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [getAllCategories]);
 
-    const getAllCategories = useCallback(async () => {
-        setLoading(true);
-        try {
-            const { data } = await axios.get('/api/v1/category/get-categories');
-            if (data?.success) {
-                setCategories(data?.categories);
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error("Failed to fetch categories");
-        } finally {
-            setLoading(false);
-        }
-    }, []);
 
     useEffect(() => {
         getAllCategories();
