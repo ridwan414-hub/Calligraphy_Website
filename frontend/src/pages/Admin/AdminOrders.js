@@ -1,108 +1,133 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import moment from "moment";
-import { Select } from "antd";
+import { Select, Table, Card, Image, Spin } from "antd";
 import { useAuth } from "../../context/auth";
+
 const { Option } = Select;
 
 const AdminOrders = () => {
-    const [status] = useState([
-        "Not Process",
+    const statusOptions = [
+        "Not Processed",
         "Processing",
         "Shipped",
-        "deliverd",
-        "cancel",
-    ]);
+        "Delivered",
+        "Cancelled",
+    ];
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [auth] = useAuth();
-    const getOrders = async () => {
+
+    const getOrders = useCallback(async () => {
+        setLoading(true);
         try {
             const { data } = await axios.get("/api/v1/auth/all-orders");
             setOrders(data);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         if (auth?.token) getOrders();
-    }, [auth?.token]);
+    }, [auth?.token, getOrders]);
 
-    const handleChange = async (orderId, value) => {
+    const handleChange = useCallback(async (orderId, value) => {
+        setLoading(true);
         try {
             await axios.put(`/api/v1/auth/order-status/${orderId}`, {
                 status: value,
             });
             getOrders();
         } catch (error) {
-            console.log(error);
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
-    };
-    return (
+    }, [getOrders]);
 
-                <div className="flex flex-col overflow-auto">
-                    <h1 className="text-center">All Orders</h1>
-                    {orders?.map((o, i) => {
-                        return (
-                            <div key={i} className="border shadow">
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Buyer</th>
-                                            <th scope="col"> date</th>
-                                            <th scope="col">Payment</th>
-                                            <th scope="col">Quantity</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{i + 1}</td>
-                                            <td>
-                                                <Select
-                                                    variant={false}
-                                                    onChange={(value) => handleChange(o._id, value)}
-                                                    defaultValue={o?.status}
-                                                >
-                                                    {status.map((s, i) => (
-                                                        <Option key={i} value={s}>
-                                                            {s}
-                                                        </Option>
-                                                    ))}
-                                                </Select>
-                                            </td>
-                                            <td>{o?.buyer?.name}</td>
-                                            <td>{moment(o?.createAt).fromNow()}</td>
-                                            <td>{o?.payment.success ? "Success" : "Failed"}</td>
-                                            <td>{o?.products?.length}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div className="container">
-                                    {o?.products?.map((p, i) => (
-                                        <div className="row mb-2 p-3 card flex-row" key={p._id}>
-                                            <div className="col-md-4">
-                                                <img
-                                                    src={`/api/v1/product/product-photo/${p._id}`}
-                                                    className="card-img-top"
-                                                    alt={p.name}
-                                                    width="100px"
-                                                    height={"100px"}
-                                                />
-                                            </div>
-                                            <div className="col-md-8">
-                                                <p>{p.name}</p>
-                                                <p>{p.description.substring(0, 30)}</p>
-                                                <p>Price : {p.price}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+    const columns = [
+        {
+            title: 'Order ID',
+            dataIndex: '_id',
+            key: '_id',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status, record) => (
+                <Select
+                    defaultValue={status}
+                    onChange={(value) => handleChange(record._id, value)}
+                    style={{ width: 120 }}
+                >
+                    {statusOptions.map((s, i) => (
+                        <Option key={i} value={s}>
+                            {s}
+                        </Option>
+                    ))}
+                </Select>
+            ),
+        },
+        {
+            title: 'Buyer',
+            dataIndex: ['buyer', 'name'],
+            key: 'buyer',
+        },
+        {
+            title: 'Date',
+            dataIndex: 'createdAt',
+            key: 'date',
+            render: (date) => moment(date).format('MMMM Do YYYY, h:mm:ss a'),
+        },
+        {
+            title: 'Payment',
+            dataIndex: ['payment', 'success'],
+            key: 'payment',
+            render: (success) => success ? "Success" : "Failed",
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'products',
+            key: 'quantity',
+            render: (products) => products.length,
+        },
+    ];
+
+    const expandedRowRender = (record) => (
+        <Card title="Products">
+            {record.products.map((p) => (
+                <Card.Grid style={{ width: '33.33%' }} key={p._id}>
+                    <Image
+                        src={`/api/v1/product/product-photo/${p._id}`}
+                        alt={p.name}
+                        width={100}
+                    />
+                    <p><strong>{p.name}</strong></p>
+                    <p>{p.description.substring(0, 30)}...</p>
+                    <p>Price: ${p.price}</p>
+                </Card.Grid>
+            ))}
+        </Card>
+    );
+
+    return (
+        <Spin spinning={loading}>
+            <div className="p-4">
+                <h1 className="text-2xl font-bold mb-4">All Orders</h1>
+                <Table
+                    columns={columns}
+                    dataSource={orders}
+                    rowKey="_id"
+                    expandable={{
+                        expandedRowRender,
+                    }}
+                />
+            </div>
+        </Spin>
     );
 };
 

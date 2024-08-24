@@ -1,44 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Card, Button, Row, Col, Spin, message } from 'antd';
+import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+const { Meta } = Card;
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    //get all products
-    const getAllProducts = async () => {
+    const getAllProducts = useCallback(async () => {
+        setLoading(true);
         try {
             const { data } = await axios.get('/api/v1/product/get-products');
             setProducts(data.products);
         } catch (error) {
-            console.log(error);
-            toast.error('Failed to load all products')
+            console.error(error);
+            message.error('Failed to load all products');
+        } finally {
+            setLoading(false);
         }
-    };
+    }, []);
+
     useEffect(() => {
         getAllProducts();
-    }, [])
+    }, [getAllProducts]);
+
+    const handleEdit = (slug) => {
+        navigate(`/dashboard/admin/product/${slug}`);
+    };
 
     return (
-        <div className='flex'>
-            <div className=''>
-                <h1 className='text-center'>All Products List</h1>
-                <div className='flex flex-wrap'>
-                    {products?.map((p) => (
-                        <Link to={`/dashboard/admin/product/${p.slug}`} key={p._id} className='product-link' >
-
-                            <div className="card m-2" style={{ width: '18rem' }}>
-                                <img src={`/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{p.name}</h5>
-                                    <p className="card-text">{p.description}</p>
-                                </div>
-                            </div>
-                        </Link>
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-4 text-center">All Products</h1>
+            <Spin spinning={loading}>
+                <Row gutter={[16, 16]}>
+                    {products.map((product) => (
+                        <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
+                            <Card
+                                hoverable
+                                cover={
+                                    <img
+                                        alt={product.name}
+                                        src={`/api/v1/product/product-photo/${product._id}`}
+                                        style={{ height: 200, objectFit: 'cover' }}
+                                    />
+                                }
+                                actions={[
+                                    <Link to={`/dashboard/admin/product/${product.slug}`}>
+                                        <EyeOutlined key="view" />
+                                    </Link>,
+                                    <Button
+                                        type="link"
+                                        icon={<EditOutlined />}
+                                        onClick={() => handleEdit(product.slug)}
+                                    >
+                                        Edit
+                                    </Button>,
+                                ]}
+                            >
+                                <Meta
+                                    title={product.name}
+                                    description={
+                                        <>
+                                            <p>{product.description.substring(0, 60)}...</p>
+                                            <p className="font-bold mt-2">Price: ${product.price}</p>
+                                        </>
+                                    }
+                                />
+                            </Card>
+                        </Col>
                     ))}
-                </div>
-            </div>
+                </Row>
+            </Spin>
         </div>
     );
 };

@@ -1,92 +1,114 @@
-import React, { useEffect, useState } from 'react';
-// import Layout from '../../components/Layouts/Layout';
-// import AdminMenu from '../../components/Layouts/AdminMenu';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import { Table, Button, Spin, Modal, message } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+
+const { confirm } = Modal;
 
 const Users = () => {
     const [users, setUsers] = useState([]);
-    const getAllUsers = async () => {
+    const [loading, setLoading] = useState(false);
+
+    const getAllUsers = useCallback(async () => {
+        setLoading(true);
         try {
             const { data } = await axios.get("/api/v1/auth/all-users");
-            if (data?.success) {
+            console.log(data)
+            if (data) {
                 setUsers(data);
-                console.log(users)
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            message.error('Failed to fetch users');
+        } finally {
+            setLoading(false);
         }
-    }
+    }, []);
+
     useEffect(() => {
         getAllUsers();
-    }, []);
-    const toggleBan = (index) => {
-        setUsers(
-            users.map((user, i) =>
-                i === index ? { ...user, isBanned: !user.isBanned } : user
-            )
-        );
+    }, [getAllUsers]);
+
+    const toggleBan = async (userId, isBanned) => {
+        try {
+            await axios.put(`/api/v1/auth/toggle-ban/${userId}`, { isBanned: !isBanned });
+            message.success(`User ${isBanned ? 'unbanned' : 'banned'} successfully`);
+            getAllUsers();
+        } catch (error) {
+            console.error(error);
+            message.error('Failed to update user status');
+        }
     };
 
-    const deleteUser = (index) => {
-        setUsers(users.filter((user, i) => i !== index));
+    const deleteUser = (userId) => {
+        confirm({
+            title: 'Are you sure you want to delete this user?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'This action cannot be undone.',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk: async () => {
+                try {
+                    await axios.delete(`/api/v1/auth/delete-user/${userId}`);
+                    message.success('User deleted successfully');
+                    getAllUsers();
+                } catch (error) {
+                    console.error(error);
+                    message.error('Failed to delete user');
+                }
+            },
+        });
     };
+    console.log(users)
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Phone',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <>
+                    <Button
+                        type={record.isBanned ? 'primary' : 'default'}
+                        onClick={() => toggleBan(record._id, record.isBanned)}
+                        className="mr-2"
+                    >
+                        {record.isBanned ? 'Unban' : 'Ban'}
+                    </Button>
+                    <Button danger onClick={() => deleteUser(record._id)}>
+                        Delete
+                    </Button>
+                </>
+            ),
+        },
+    ];
+
     return (
-
-
-        <div className='flex'>
-            <div className='w-full'>
-                <div className='w-3/4 p-3'>
-                    <div className="border shadow">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Ban/Unban</th>
-                                    <th scope="col">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {users?.map((u, i) => {
-                                    return (
-                                        <tr key={i}>
-                                            <td>{i + 1}</td>
-
-                                            <td>{u?.name}</td>
-
-                                            <td>{u?.email}</td>
-                                            <td>{u?.phone}</td>
-                                            <td>
-                                                <button
-                                                    className={`px-2 text-xs font-bold rounded ${u.isBanned
-                                                        ? 'bg-green-500 text-white'
-                                                        : 'bg-red-500 text-white'
-                                                        }`}
-                                                    onClick={() => toggleBan(i)}
-                                                >
-                                                    {u.isBanned ? 'Unban' : 'Ban'}
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    className="px-2 text-xs font-bold rounded bg-red-500 text-white"
-                                                    onClick={() => deleteUser(i)}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-4">User Management</h1>
+            <Spin spinning={loading}>
+                <Table
+                    columns={columns}
+                    dataSource={users}
+                    rowKey="_id"
+                    pagination={{ pageSize: 10 }}
+                />
+            </Spin>
         </div>
-
     );
 };
 
