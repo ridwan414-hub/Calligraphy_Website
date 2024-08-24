@@ -4,87 +4,88 @@ import Layout from '../../components/Layouts/Layout';
 import axios from 'axios';
 import { useAuth } from '../../context/auth';
 import moment from 'moment';
+import { FaSpinner } from 'react-icons/fa';
+
+const OrderItem = ({ product }) => (
+    <div className="flex items-center border-b border-gray-200 py-4 hover:bg-gray-50 transition duration-150 ease-in-out" key={product._id}>
+        <img src={`/api/v1/product/product-photo/${product._id}`} alt={product.name} className="w-24 h-24 object-cover rounded-md mr-4 shadow-sm" />
+        <div>
+            <h3 className="font-semibold text-lg">{product.name}</h3>
+            <p className="text-sm text-gray-600">{product.description.substring(0, 50)}...</p>
+            <p className="text-sm font-medium mt-1 text-green-600">Price: ${product.price.toFixed(2)}</p>
+        </div>
+    </div>
+);
+
+const OrderCard = ({ order, index }) => (
+    <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6 transition duration-300 ease-in-out transform hover:scale-102 hover:shadow-lg">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-4 py-3 text-white">
+            <h2 className="text-lg font-semibold">Order #{index + 1}</h2>
+        </div>
+        <div className="p-4">
+            <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <p><strong>Status:</strong> <span className={`px-2 py-1 rounded-full text-xs ${order.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{order.status}</span></p>
+                    <p><strong>Buyer:</strong> {order.buyer?.name}</p>
+                    <p><strong>Date:</strong> {moment(order.createAt).format('MMMM D, YYYY')}</p>
+                </div>
+                <div>
+                    <p><strong>Payment:</strong> <span className={`px-2 py-1 rounded-full text-xs ${order.payment.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{order.payment.success ? "Success" : "Failed"}</span></p>
+                    <p><strong>Quantity:</strong> {order.products?.length}</p>
+                </div>
+            </div>
+            <h3 className="font-semibold mb-2 text-lg">Products:</h3>
+            {order.products?.map((product) => (
+                <OrderItem product={product} key={product._id} />
+            ))}
+        </div>
+    </div>
+);
 
 const Orders = () => {
-    const [auth] = useAuth()
-    const [orders, setOrders] = useState([])
+    const [auth] = useAuth();
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const getOrders = async () => {
-        try {
-            const { data } = await axios.get('/api/v1/auth/orders')
-            setOrders(data)
-        } catch (error) {
-            console.error(`Error in getOrders: ${error}`)
-        }
-    }
     useEffect(() => {
-        if (auth?.token) getOrders()
-    }, [auth?.token])
+        const getOrders = async () => {
+            try {
+                const { data } = await axios.get('/api/v1/auth/orders');
+                setOrders(data);
+            } catch (error) {
+                console.error(`Error fetching orders: ${error}`);
+            } finally {
+                setLoading(false);
+            }
+        };
+        if (auth?.token) getOrders();
+    }, [auth?.token]);
 
     return (
-        <>
-            <Layout title={"Your Orders"}>
-                <div className="container-flui p-3 m-3 dashboard">
-                    <div className="grid grid-cols-1 md:grid-cols-3">
-                        <div className="md:col-span-1">
-                            <UserMenu />
-                        </div>
-                        <div className="md:col-span-2">
-                            <h1 className="text-center">All Orders</h1>
-                            {orders?.map((o, i) => {
-                                return (
-                                    <div className="border shadow">
-                                        <table className="table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Buyer</th>
-                                                    <th scope="col"> date</th>
-                                                    <th scope="col">Payment</th>
-                                                    <th scope="col">Quantity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>{i + 1}</td>
-                                                    <td>{o?.status}</td>
-                                                    <td>{o?.buyer?.name}</td>
-                                                    <td>{moment(o?.createAt).fromNow()}</td>
-                                                    <td>{o?.payment.success ? "Success" : "Failed"}</td>
-                                                    <td>{o?.products?.length}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div className="container">
-                                            {o?.products?.map((p, i) => (
-                                                <div className="row mb-2 p-3 card flex-row" key={p._id}>
-                                                    <div className="col-md-4">
-                                                        <img
-                                                            src={`/api/v1/product/product-photo/${p._id}`}
-                                                            className="card-img-top"
-                                                            alt={p.name}
-                                                            width="100px"
-                                                            height={"100px"}
-                                                        />
-                                                    </div>
-                                                    <div className="col-md-8">
-                                                        <p>{p.name}</p>
-                                                        <p>{p.description.substring(0, 30)}</p>
-                                                        <p>Price : {p.price}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+        <Layout title="Your Orders">
+            <div className="container mx-auto px-4 py-8">
+                <div className="flex flex-col md:flex-row gap-8">
+                    <div className="md:w-1/4">
+                        <UserMenu />
+                    </div>
+                    <div className="md:w-3/4">
+                        <h1 className="text-3xl font-bold mb-6 text-gray-800">Your Orders</h1>
+                        {loading ? (
+                            <div className="flex justify-center items-center h-64">
+                                <FaSpinner className="animate-spin text-4xl text-blue-500" />
+                            </div>
+                        ) : orders.length === 0 ? (
+                            <p className="text-gray-600 text-center py-8 bg-gray-100 rounded-lg">No orders found.</p>
+                        ) : (
+                            orders.map((order, index) => (
+                                <OrderCard order={order} index={index} key={order._id} />
+                            ))
+                        )}
                     </div>
                 </div>
-            </Layout>
-        </>
-    )
+            </div>
+        </Layout>
+    );
 };
 
 export default Orders;
