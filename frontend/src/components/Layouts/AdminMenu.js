@@ -1,59 +1,70 @@
-import { useState } from 'react';
+// AdminMenu.js
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 const AdminMenu = () => {
     const [open, setOpen] = useState(true);
     const Menus = [
-        { route: 'create-category', title: 'Create Category', src: 'Chart_fill' },
-        { route: 'create-product', title: 'Create Product', src: 'Chat' },
-        { route: 'users', title: 'Users', src: 'User', gap: false },
-        { route: 'orders ', title: 'Orders', src: 'Setting', gap: false },
-        { route: 'products', title: 'Update Product', src: 'Blog' },
-        { route: 'Logout', title: 'Log Out', src: 'Logout', gap: true },
+        { route: 'create-category', title: 'Create Category', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+        { route: 'create-product', title: 'Create Product', icon: 'M12 4v16m8-8H4' },
+        { route: 'users', title: 'Users', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
+        { route: 'orders', title: 'Orders', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
+        { route: 'products', title: 'Update Product', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
     ];
 
     return (
-        <div
-            className={` ${open ? 'w-72' : 'w-20 '
-                } bg-dark-purple p-5 sticky top-0 pt-8 duration-300`}
-        >
-            <img
-                src="/admin-sidebar-images/control.png"
-                alt='control'
-                className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple
-           border-2 rounded-full  ${!open && 'rotate-180'}`}
+        <div className={`${open ? 'w-64' : 'w-20'} bg-indigo-800 text-white p-5 pt-8 relative duration-300`}>
+            <button
+                className="absolute -right-3 top-9 w-7 h-7 rounded-full bg-white text-indigo-800 flex items-center justify-center cursor-pointer"
                 onClick={() => setOpen(!open)}
-            />
-            <div className="flex gap-x-4 items-center">
-                <Link to='/dashboard/admin'><img
-                    src="/admin-sidebar-images/logo.png"
-                    alt='logo'
-                    className={`cursor-pointer duration-500 ${open && 'rotate-[360deg]'}`}
-                /></Link>
-                <h1
-                    className={`text-white origin-left font-medium text-xl duration-200 ${!open && 'scale-0'
-                        }`}
-                >
+            >
+                {open ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                    </svg>
+                ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                    </svg>
+                )}
+            </button>
+            <div className="flex items-center space-x-4 mb-6">
+                <Link to="/dashboard/admin">
+                    <img src="/admin-sidebar-images/logo.png" alt="logo" className="w-10 h-10" />
+                </Link>
+                <h1 className={`text-white font-medium text-xl duration-200 ${!open && 'hidden'}`}>
                     Admin Panel
                 </h1>
             </div>
-            <ul className="pt-6">
-                {Menus.map((Menu, index) => (
-                    <NavLink key={index} to={`/dashboard/admin/${Menu.route}`}>
-                        <li
-                            className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4
-                            ${Menu.gap ? 'm-10 mt-24' : 'mt-2'} ${index === 0 && 'bg-light-white'
-                                } `}
-                        >
-                            <img src={`/admin-sidebar-images/${Menu.src}.png`}
-                                alt='control'
-                            />
-                            <span className={`${!open && 'hidden'} origin-left duration-200`}>
-                                {Menu.title}
-                            </span>
-                        </li>
+            <ul className="pt-2">
+                {Menus.map((menu, index) => (
+                    <NavLink
+                        key={index}
+                        to={`/dashboard/admin/${menu.route}`}
+                        className={({ isActive }) =>
+                            `flex items-center gap-x-4 cursor-pointer p-2 hover:bg-indigo-700 rounded-md mt-2 ${isActive ? 'bg-indigo-700' : ''
+                            }`
+                        }
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={menu.icon} />
+                        </svg>
+                        <span className={`${!open && 'hidden'} origin-left duration-200`}>
+                            {menu.title}
+                        </span>
                     </NavLink>
                 ))}
+                <NavLink
+                    to="/logout"
+                    className="flex items-center gap-x-4 cursor-pointer p-2 hover:bg-indigo-700 rounded-md mt-8"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span className={`${!open && 'hidden'} origin-left duration-200`}>
+                        Log Out
+                    </span>
+                </NavLink>
             </ul>
         </div>
     );

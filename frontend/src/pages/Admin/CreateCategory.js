@@ -1,124 +1,163 @@
-import React, { useEffect, useState } from 'react'
-// import Layout from '../../components/Layouts/Layout'
-// import AdminMenu from '../../components/Layouts/AdminMenu'
-import toast from 'react-hot-toast'
-import axios from 'axios'
-import CategoryForm from '../../components/Form/CategoryForm'
-import { Modal } from 'antd'
+import React, { useEffect, useState, useCallback } from 'react';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import CategoryForm from '../../components/Form/CategoryForm';
+import { Modal, Button, Table, Spin } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const CreateCategory = () => {
-    const [categories, setCategories] = useState([])
-    const [name, setName] = useState('')
-    const [visible, setVisible] = useState(false)
-    const [selected, setSelected] = useState(null)
-    const [updatedName, setUpdatedName] = useState('')
-    //handle form submit
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const [categories, setCategories] = useState([]);
+    const [name, setName] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [selected, setSelected] = useState(null);
+    const [updatedName, setUpdatedName] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = useCallback(async (e) => {
+        e.preventDefault();
+        setLoading(true);
         try {
-            const { data } = await axios.post('/api/v1/category/create-category', { name })
+            const { data } = await axios.post('/api/v1/category/create-category', { name });
             if (data?.success) {
-                toast.success(data.message)
-                getAllCategories()
+                toast.success(data.message);
+                setName('');
+                getAllCategories();
             } else {
-                toast.error(data.message)
+                toast.error(data.message);
             }
         } catch (error) {
-            console.log(error)
-            toast.error("Failed to create category")
+            console.error(error);
+            toast.error("Failed to create category");
+        } finally {
+            setLoading(false);
         }
-    }
-    //handle update category
-    const handleUpdate = async (e) => {
-        e.preventDefault()
+    }, [name]);
+
+    const handleUpdate = useCallback(async (e) => {
+        e.preventDefault();
+        setLoading(true);
         try {
-            const { data } = await axios.put(`/api/v1/category/update-category/${selected._id}`, { name: updatedName })
+            const { data } = await axios.put(`/api/v1/category/update-category/${selected._id}`, { name: updatedName });
             if (data?.success) {
-                toast.success(data.message)
-                setSelected(null)
-                setUpdatedName('')
-                setVisible(false)
-                getAllCategories()
+                toast.success(data.message);
+                setSelected(null);
+                setUpdatedName('');
+                setVisible(false);
+                getAllCategories();
             } else {
-                toast.error(data.message)
+                toast.error(data.message);
             }
         } catch (error) {
-            console.log(error)
-            toast.error("Failed to update category")
+            console.error(error);
+            toast.error("Failed to update category");
+        } finally {
+            setLoading(false);
         }
-    }
-    //handle delete category
-    const handleDelete = async (pid) => {
+    }, [selected, updatedName]);
+
+    const handleDelete = useCallback(async (id) => {
+        setLoading(true);
         try {
-            const { data } = await axios.delete(`/api/v1/category/delete-category/${pid}`)
+            const { data } = await axios.delete(`/api/v1/category/delete-category/${id}`);
             if (data?.success) {
-                toast.success(`Category is deleted successfully`)
-                getAllCategories()
+                toast.success(`Category deleted successfully`);
+                getAllCategories();
             } else {
-                toast.error(data.message)
+                toast.error(data.message);
             }
         } catch (error) {
-            console.log(error)
-            toast.error("Failed to delete category")
+            console.error(error);
+            toast.error("Failed to delete category");
+        } finally {
+            setLoading(false);
         }
-    }
-    //get all categories
-    const getAllCategories = async () => {
+    }, []);
+
+    const getAllCategories = useCallback(async () => {
+        setLoading(true);
         try {
-            const { data } = await axios.get('/api/v1/category/get-categories')
-            if (data?.success) { setCategories(data?.categories) }
+            const { data } = await axios.get('/api/v1/category/get-categories');
+            if (data?.success) {
+                setCategories(data?.categories);
+            }
         } catch (error) {
-            console.log(error)
-            toast.error("Failed to fetch categories")
+            console.error(error);
+            toast.error("Failed to fetch categories");
+        } finally {
+            setLoading(false);
         }
-    }
+    }, []);
 
     useEffect(() => {
-        getAllCategories()
-    }, [])
+        getAllCategories();
+    }, [getAllCategories]);
+
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            render: (_, record) => (
+                <>
+                    <Button
+                        type="primary"
+                        icon={<EditOutlined />}
+                        onClick={() => {
+                            setVisible(true);
+                            setUpdatedName(record.name);
+                            setSelected(record);
+                        }}
+                        className="mr-2"
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        type="danger"
+                        icon={<DeleteOutlined />}
+                        onClick={() => handleDelete(record._id)}
+                    >
+                        Delete
+                    </Button>
+                </>
+            ),
+        },
+    ];
 
     return (
-        <div>
-            <h1 className='text-2xl'>Manage Category</h1>
-            <div className='p-3 w-1/2'>
+        <div className="p-4">
+            <h1 className="text-2xl font-bold mb-4">Manage Categories</h1>
+            <div className="mb-6">
                 <CategoryForm
                     handleSubmit={handleSubmit}
                     value={name}
                     setValue={setName}
+                    buttonText="Create Category"
+                    loading={loading}
                 />
             </div>
-            <div className='w-3/4'>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {categories?.map((c) => (
-
-                            <tr key={c._id}>
-                                <td>{c.name}</td>
-                                <td >
-                                    <button className='btn btn-primary ms-2' onClick={() => {
-                                        setVisible(true)
-                                        setUpdatedName(c.name)
-                                        setSelected(c)
-                                    }}>Edit</button>
-                                    <button className='btn btn-danger ms-2' onClick={() => handleDelete(c._id)}>Delete</button>
-                                </td>
-                            </tr>
-
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <Modal onCancel={() => setVisible(false)} footer={null} open={visible}>
-                <CategoryForm handleSubmit={handleUpdate} value={updatedName} setValue={setUpdatedName} />
+            <Spin spinning={loading}>
+                <Table columns={columns} dataSource={categories} rowKey="_id" />
+            </Spin>
+            <Modal
+                title="Edit Category"
+                visible={visible}
+                onCancel={() => setVisible(false)}
+                footer={null}
+            >
+                <CategoryForm
+                    handleSubmit={handleUpdate}
+                    value={updatedName}
+                    setValue={setUpdatedName}
+                    buttonText="Update Category"
+                    loading={loading}
+                />
             </Modal>
         </div>
-    )
-}
+    );
+};
 
-export default CreateCategory
+export default CreateCategory;
