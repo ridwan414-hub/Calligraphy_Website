@@ -2,31 +2,26 @@ import React from 'react';
 import Layout from '../../components/Layouts/Layout';
 import UserMenu from '../../components/Layouts/UserMenu';
 import { useAuth } from '../../context/auth';
+import UserInfo from '../../components/page-components/dashboard/UserInfo';
 // import Album from '../../components/Album';
 
 const Dashboard = () => {
-    const [auth]=useAuth()
+    const [auth] = useAuth();
+
     return (
-        <>
-            <Layout title={'User Dashboard - Orders'}>
-                <div className='glass mx-auto my-3 px-3'>
-                    <div className='flex'>
-                        <div className='w-1/4'>
-                            <UserMenu />
-                        </div>
-                        <div className='w-3/4'>
-                            <div className='card w-3/4 p-3'>
-                                <h3>User Name :{auth?.user?.name }</h3>
-                                <h3>User Email :{auth?.user?.email }</h3>
-                                <h3>User Address :{auth?.user?.address }</h3>
-                            </div>
-                        </div>
+        <Layout title={'User Dashboard'}>
+            <div className='container mx-auto py-8'>
+                <div className='flex flex-col md:flex-row gap-8'>
+                    <div className='md:w-1/4'>
+                        <UserMenu />
+                    </div>
+                    <div className='md:w-3/4'>
+                        <UserInfo user={auth?.user} />
                     </div>
                 </div>
-                {/* <Album/> */}
-            </Layout>
-        </>
-    )
+            </div>
+        </Layout>
+    );
 };
 
 export default Dashboard;
