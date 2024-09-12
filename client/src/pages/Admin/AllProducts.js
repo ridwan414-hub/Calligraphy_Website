@@ -66,7 +66,7 @@ const AllProducts = () => {
                                     description={
                                         <>
                                             <p>{product.description.substring(0, 60)}...</p>
-                                            <p className="font-bold mt-2">Price: ${product.price}</p>
+                                            <p className="font-bold mt-2">Price: Tk {product.price}</p>
                                         </>
                                     }
                                 />

@@ -1,9 +1,25 @@
 // AdminMenu.js
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/auth';
+import toast from 'react-hot-toast';
+import { Button } from 'antd';
 
 const AdminMenu = () => {
+    const navigate = useNavigate()
+    const [auth, setAuth] = useAuth();
     const [open, setOpen] = useState(true);
+
+    const handleLogOut = () => {
+        setAuth({
+            ...auth,
+            user: null,
+            token: ''
+        })
+        localStorage.removeItem('auth');
+        navigate('/login')
+        toast.success('Logged out successfully');
+    }
     const Menus = [
         { route: 'create-category', title: 'Create Category', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
         { route: 'create-product', title: 'Create Product', icon: 'M12 4v16m8-8H4' },
@@ -54,17 +70,17 @@ const AdminMenu = () => {
                         </span>
                     </NavLink>
                 ))}
-                <NavLink
-                    to="/logout"
+                <Button
+                    onClick={handleLogOut}
                     className="flex items-center gap-x-4 cursor-pointer p-2 hover:bg-indigo-700 rounded-md mt-8"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
-                    <span className={`${!open && 'hidden'} origin-left duration-200`}>
+                    <span className={`${!open && 'hidden'} origin-left duration-200`} >
                         Log Out
                     </span>
-                </NavLink>
+                </Button>
             </ul>
         </div>
     );
