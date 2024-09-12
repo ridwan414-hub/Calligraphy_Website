@@ -1,12 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../../context/search";
-// import { AiOutlineEnter } from "react-icons/ai";
 
 const SearchInput = () => {
     const [values, setValues] = useSearch();
     const navigate = useNavigate();
+    const [products, setProducts] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+    const fetchProducts = async () => {
+        try {
+            const { data } = await axios.get('/api/v1/product/get-products');
+            setProducts(data?.products || []);  // Ensure we handle undefined data
+        } catch (error) {
+            console.log("Error fetching products:", error);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const keyword = e.target.value;
+        setValues({ ...values, keyword });
+
+        if (keyword.length > 0) {
+            console.log(products)
+            const filteredSuggestions = products
+                .filter(product =>
+                    product?.name && product.name.toLowerCase().includes(keyword.toLowerCase())
+                )
+                .map(product => product.name)
+                .slice(0, 5); // Limit to 5 suggestions
+
+            setSuggestions(filteredSuggestions);
+            setShowDropdown(filteredSuggestions.length > 0); // Show dropdown only if there are suggestions
+        } else {
+            setSuggestions([]);
+            setShowDropdown(false);
+        }
+    };
+
+    const handleSuggestionClick = (suggestion) => {
+        setValues({ ...values, keyword: suggestion });
+        setShowDropdown(false);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,13 +57,12 @@ const SearchInput = () => {
             setValues({ ...values, results: data });
             navigate("/search");
         } catch (error) {
-            console.log(error);
+            console.log("Error fetching search results:", error);
         }
     };
 
-
     return (
-        <div className="my-auto">
+        <div className="my-auto mx-4 relative">
             <form className="flex search-form" role="search" onSubmit={handleSubmit}>
                 <label className="input input-bordered flex input-info input-sm w-full max-w-xs items-center gap-2">
                     <svg
@@ -38,12 +77,23 @@ const SearchInput = () => {
                         className="grow"
                         placeholder="Search By Product Name"
                         value={values.keyword}
-                        onChange={(e) => {
-                            setValues({ ...values, keyword: e.target.value })
-                        }} />
-                    {/* <AiOutlineEnter /> */}
+                        onChange={handleInputChange}
+                    />
                 </label>
             </form>
+            {showDropdown && suggestions.length > 0 && (
+                <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1">
+                    {suggestions.map((suggestion, index) => (
+                        <li
+                            key={index}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                            {suggestion}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
