@@ -3,8 +3,9 @@ import Layout from '../components/Layouts/Layout';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Spin, Card, Button, Skeleton } from 'antd';
-import { ShoppingCartOutlined, DollarOutlined, InboxOutlined, TagsOutlined, CarOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, InboxOutlined, TagsOutlined, CarOutlined } from '@ant-design/icons';
 import { LoadingOutlined } from '@ant-design/icons';
+import { FaBangladeshiTakaSign } from 'react-icons/fa6';
 import { useCart } from '../context/cart';
 import toast from 'react-hot-toast';
 
@@ -79,9 +80,9 @@ const ProductDetails = () => {
                                     <InboxOutlined className='text-gray-500 mr-2' />
                                     {product.description}
                                 </p>
-                                <p className='text-2xl font-semibold mb-4 text-gray-700 flex items-center'>
-                                    <DollarOutlined className='text-green-500 mr-2' />
-                                    ${product.price}
+                                <p className='text-2xl font-semibold mb-4 text-gray-700 flex items-center gap-2'>
+                                    <FaBangladeshiTakaSign />
+                                    {product.price}
                                 </p>
                                 <p className='text-lg mb-4 text-gray-600 flex items-center'>
                                     <InboxOutlined className='text-yellow-500 mr-2' />

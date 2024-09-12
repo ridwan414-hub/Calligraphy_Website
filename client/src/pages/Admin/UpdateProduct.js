@@ -16,20 +16,23 @@ const UpdateProduct = () => {
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState('');
     const [categories, setCategories] = useState([]);
+    const [productId, setProductId] = useState(''); // State to store product._id
 
     const fetchProductDetails = useCallback(async () => {
         setLoading(true);
         try {
             const { data } = await axios.get(`/api/v1/product/get-product/${slug}`);
+            const product = data.product;
             form.setFieldsValue({
-                name: data.product.name,
-                description: data.product.description,
-                price: data.product.price,
-                quantity: data.product.quantity,
-                shipping: data.product.shipping ? "1" : "0",
-                category: data.product.category._id
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                quantity: product.quantity,
+                shipping: product.shipping ? "1" : "0",
+                category: product.category._id
             });
-            setImageUrl(`/api/v1/product/product-photo/${data.product._id}`);
+            setImageUrl(`/api/v1/product/product-photo/${product._id}`);
+            setProductId(product._id); // Store the product._id
         } catch (error) {
             console.error(error);
             message.error("Failed to fetch product details");
@@ -65,7 +68,7 @@ const UpdateProduct = () => {
                 }
             });
 
-            await axios.put(`/api/v1/product/update-product/${slug}`, formData);
+            await axios.put(`/api/v1/product/update-product/${productId}`, formData); // Use productId
             message.success('Product updated successfully');
             navigate('/dashboard/admin/products');
         } catch (error) {
@@ -79,7 +82,7 @@ const UpdateProduct = () => {
     const handleDelete = async () => {
         setLoading(true);
         try {
-            await axios.delete(`/api/v1/product/delete-product/${slug}`);
+            await axios.delete(`/api/v1/product/delete-product/${productId}`); // Use productId
             message.success('Product deleted successfully');
             navigate('/dashboard/admin/products');
         } catch (error) {
@@ -141,7 +144,7 @@ const UpdateProduct = () => {
                             <Form.Item name="price" label="Price" rules={[{ required: true }]}>
                                 <InputNumber
                                     style={{ width: '100%' }}
-                                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    formatter={value => `Tk ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
                                 />
                             </Form.Item>
