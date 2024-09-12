@@ -37,6 +37,7 @@ const Header = () => {
                         </ul>
                     </li>
                     <li><NavLink to='/about'>About</NavLink></li>
+                    <li><NavLink to='/contact'>Contact us</NavLink></li>
                 </ul>
             </div>
             <NavLink className="btn btn-ghost lg:text-xl sm:text-sm flex flex-shrink">
@@ -59,6 +60,7 @@ const Header = () => {
                 </li>
                 <li><NavLink to='/about'>About</NavLink></li>
                 <SearchInput />
+                <li><NavLink to='/contact'>Contact Us</NavLink></li>
             </ul>
         </div>
         <div className="navbar-end flex flex-wrap gap-4">
@@ -83,9 +85,9 @@ const Header = () => {
                             <summary>
                                 <div className="avatar placeholder">
                                     <div className="bg-neutral text-neutral-content rounded-full w-8">
-                                        <span>{auth?.user?.name.split('')[0] + auth?.user?.name.split('')[1] }</span>
+                                        <span>{auth?.user?.name.split('')[0] + auth?.user?.name.split('')[1]}</span>
                                     </div>
-                                </div> 
+                                </div>
                                 {auth?.user?.name}
                             </summary>
                             <ul className="absolute">
