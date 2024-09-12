@@ -13,7 +13,7 @@ export default function Card({ product }) {
             <div className=" bg-gradient-to-tr from-blue-200 from-60% via-blue-300 via-90% to-90% hover: rounded-lg overflow-hidden shadow-lg ring-1 ring-violet-800 ring-opacity-40 max-w-sm w-72 mx-2 my-4 hover:scale-105 hover:shadow-xl transform transition duration-300 ">
                 <div className="relative">
                     <img className="w-full p-1 rounded-lg object-cover aspect-square" src={`/api/v1/product/product-photo/${product?._id}`} alt={product?.name} />
-                    <div className="absolute top-0 right-0 bg-blue-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium">{product.category.name}
+                    <div className="absolute top-0 right-0 bg-blue-500 text-white px-2 py-1 m-2 rounded-md text-sm font-medium">{product?.category?.name}
                     </div>
                 </div>
                 <div className="p-4">
