@@ -142,11 +142,7 @@ const UpdateProduct = () => {
                                 <TextArea rows={4} prefix={<i className="fas fa-info-circle" />} />
                             </Form.Item>
                             <Form.Item name="price" label="Price" rules={[{ required: true }]}>
-                                <InputNumber
-                                    style={{ width: '100%' }}
-                                    formatter={value => `Tk ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                />
+                                <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                             <Form.Item name="quantity" label="Quantity" rules={[{ required: true }]}>
                                 <InputNumber style={{ width: '100%' }} />

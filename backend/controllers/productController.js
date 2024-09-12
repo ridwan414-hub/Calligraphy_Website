@@ -150,6 +150,7 @@ export const deleteProductController = async (req, res) => {
 export const updateProductController = async (req, res) => {
     try {
         const { name, description, price, category, quantity, shipping } = req.fields;
+        console.log(price)
         const { photo } = req.files;
         const { pid } = req.params
         switch (true) {
@@ -177,6 +178,7 @@ export const updateProductController = async (req, res) => {
             product.photo.data = fs.readFileSync(photo.path);
             product.photo.contentType = photo.type;
         }
+        console.log(product)
         await product.save();
 
         res.status(201).send({
@@ -204,7 +206,6 @@ export const getProductFiltersController = async (req, res) => {
         if (checked.length > 0) args.category = checked;
         if (radio.length > 0) args.price = { $gte: radio[0], $lte: radio[1] };
         const products = await productModel.find(args).populate('category')
-        console.log(products)
         res.status(200).send({
             success: true,
             message: 'Products fetched successfully',
