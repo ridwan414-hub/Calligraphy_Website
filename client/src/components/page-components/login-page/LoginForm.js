@@ -38,7 +38,7 @@ export default function LoginForm() {
         }
     };
     return (
-        <div className="flex rounded-3xl my-10 bg-gradient-to-tr from-blue-200 from-10% via-sky-300 via-30%  to-90% flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="flex rounded-3xl my-10 bg-gradient-to-tr from-blue-200 from-10% via-sky-300 via-30%  to-90% flex-1 flex-col justify-center px-6 py-12 lg:px-8 shadow-lg">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     className="mx-auto h-20 w-auto rounded-full"
