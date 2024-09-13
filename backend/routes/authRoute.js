@@ -13,30 +13,30 @@ router.post("/login", loginController)
 //Forgot Password
 router.post("/forgot-password", forgotPasswordControllerByMail)
 router.put("/reset-password/:token", resetPasswordController)
- 
+
 //test route
 router.get("/test", requireSignIn, isAdmin, testController)
 
 //protected USER route auth
 router.get('/user-auth', requireSignIn, (req, res) => {
-    res.status(200).send({ok:true})
+    res.status(200).send({ ok: true })
 })
 
 //protected ADMIN route auth
-router.get('/admin-auth', requireSignIn,isAdmin, (req, res) => {
-    res.status(200).send({ok:true})
- })
+router.get('/admin-auth', requireSignIn, isAdmin, (req, res) => {
+    res.status(200).send({ ok: true })
+})
 
 
 //update profile
 router.put("/profile", requireSignIn, updateProfileController)
 //orders
-router.get('/orders',requireSignIn,getOrdersController)
+router.get('/orders', requireSignIn, getOrdersController)
 //All orders
 router.get('/all-orders', requireSignIn, isAdmin, getAllOrdersController)
 //order status update
 router.put('/order-status/:orderId', requireSignIn, isAdmin, updateOrderStatusController)
 //all users data
-router.get('/all-users', requireSignIn, isAdmin,getAllUsersController)
+router.get('/all-users', requireSignIn, isAdmin, getAllUsersController)
 
 export default router;
