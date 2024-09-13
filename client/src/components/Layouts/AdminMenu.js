@@ -8,7 +8,7 @@ import { Button } from 'antd';
 const AdminMenu = () => {
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth();
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const handleLogOut = () => {
         setAuth({
@@ -46,7 +46,7 @@ const AdminMenu = () => {
             </button>
             <div className="flex items-center space-x-4 mb-6">
                 <Link to="/dashboard/admin">
-                    <img src="/admin-sidebar-images/logo.png" alt="logo" className="w-10 h-10" />
+                    <img src='/aplogo.png' alt="logo" className="w-10 h-10" />
                 </Link>
                 <h1 className={`text-white font-medium text-xl duration-200 ${!open && 'hidden'}`}>
                     Admin Panel
@@ -77,9 +77,9 @@ const AdminMenu = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
-                    <span className={`${!open && 'hidden'} origin-left duration-200`} >
+                    {open && <span className='hidden origin-left duration-200' >
                         Log Out
-                    </span>
+                    </span>}
                 </Button>
             </ul>
         </div>
