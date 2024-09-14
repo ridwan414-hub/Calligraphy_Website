@@ -9,7 +9,7 @@ const Contact = () => {
                 <div className="container mx-auto px-4">
                     <h1 className="text-5xl font-bold text-center text-sky-800 mb-12">Contact Us</h1>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        <div className="bg-white rounded-lg shadow-xl p-8">
+                        <div className="bg-violet-100 rounded-lg shadow-xl p-8">
                             <h2 className="text-2xl font-semibold mb-6 text-sky-700">Get in Touch</h2>
                             <form>
                                 <div className="mb-6">
@@ -28,7 +28,7 @@ const Contact = () => {
                             </form>
                         </div>
                         <div>
-                            <div className="bg-white rounded-lg shadow-xl p-8 mb-8">
+                            <div className="bg-violet-100 rounded-lg shadow-xl p-8 mb-8">
                                 <h2 className="text-2xl font-semibold mb-6 text-sky-700">Contact Information</h2>
                                 <div className="space-y-4">
                                     <div className="flex items-start">
@@ -49,7 +49,7 @@ const Contact = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="bg-white rounded-lg shadow-xl overflow-hidden">
+                            <div className="bg-violet-100 rounded-lg shadow-xl overflow-hidden">
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.7951801813173!2d90.35517331498088!3d23.75577478458662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf5c7a7f2db3%3A0x4a2ce5056f5c4d5c!2sMohammadia%20Housing%20Society%2C%20Dhaka%201207!5e0!3m2!1sen!2sbd!4v1631234567890!5m2!1sen!2sbd"
                                     width="100%"

@@ -38,7 +38,6 @@ const HomepageProductsFilteringSection = () => {
     }
   }, [checked, radio]);
 
-
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get('/api/v1/category/get-categories');
@@ -113,18 +112,18 @@ const HomepageProductsFilteringSection = () => {
   };
 
   return (
-    <div className="flex relative gap-2 mt-3">
+    <div className="flex flex-col lg:flex-row relative gap-4 mt-3">
       {/* Filter section */}
-      <div className="py-2 rounded-xl h-screen sticky top-[70px] flex-col">
-        <div className="flex flex-row form-control">
+      <div className="lg:w-1/4 w-full py-2 rounded-xl lg:sticky top-[70px]">
+        <div className="flex flex-col lg:flex-row lg:w-full form-control">
           {/* category-filter */}
-          <div className="w-72 flex font-serif bg-gradient-to-tr from-blue-300 from-10% via-sky-300 via-30% to-green-200 to-100% flex-col glass px-8 py-2 rounded-xl">
-            <h4 className="py-2 text-center text-2xl flex justify-center font-semibold">
+          <div className="w-full lg:w-full bg-gradient-to-tr from-blue-300 from-10% via-sky-300 via-30% to-green-200 to-100% flex flex-col px-6 py-4 rounded-xl glass">
+            <h4 className="py-2 text-center text-2xl font-semibold">
               Filter By Category
             </h4>
             {categories?.map((c) => (
               <label key={c._id} className="label cursor-pointer">
-                <span className="label-text font-medium">{c.name}</span>
+                <span className="label-text">{c.name}</span>
                 <input
                   type="checkbox"
                   className="checkbox checkbox-xs checkbox-secondary"
@@ -134,27 +133,29 @@ const HomepageProductsFilteringSection = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col justify-center">
+
+        <div className="flex flex-col justify-center my-4">
           <button
-            className="btn btn-accent m-2"
+            className="btn btn-accent"
             onClick={() => window.location.reload()}
           >
             RESET FILTERS
           </button>
         </div>
+
         {/* price-filter */}
         <div
-          className="w-72 font-serif bg-gradient-to-tr from-blue-300 from-10% via-sky-300 via-30% to-green-200 to-100% flex gap-2 flex-col justify-evenly glass py-2 px-2 rounded-xl"
+          className="w-full lg:w-full bg-gradient-to-tr from-blue-300 from-10% via-sky-300 via-30% to-green-200 to-100% flex flex-col gap-2 px-6 py-4 rounded-xl glass"
           onChange={(e) => setRadio(Prices[e.target.value].array)}
         >
           <h4 className="text-center text-2xl font-semibold">Filter By Price</h4>
           {Prices?.map((p) => (
-            <div className="flex justify-between px-4" key={p._id}>
-              <label className="font-medium">{p.name}</label>
+            <div className="flex justify-between" key={p._id}>
+              <label>{p.name}</label>
               <input
                 type="radio"
                 value={p._id}
-                className="radio-xs radio radio-secondary mx-4"
+                className="radio-xs radio radio-secondary"
                 checked={radio === p.array}
                 onChange={(e) => setRadio(e.target.value)}
               />
@@ -165,7 +166,9 @@ const HomepageProductsFilteringSection = () => {
 
       {/* Products section */}
       <div className="glass w-full py-2 px-2 rounded-xl">
-        <h1 className="text-center text-3xl font-semibold py-8">All Products</h1>
+        <h1 className="text-center text-3xl font-semibold py-8">
+          All Products
+        </h1>
         {loading ? (
           <Loader message={'Loading Products...'} />
         ) : (
