@@ -55,7 +55,7 @@ const ProductDetails = () => {
 
     return (
         <Layout title='Product Details'>
-            <div className='container mx-auto px-6 py-8 bg-gray-100'>
+            <div className='container mx-auto my-4 px-6 py-8 bg-gray-50 rounded-lg'>
                 <Spin
                     spinning={loading}
                     indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
@@ -86,7 +86,7 @@ const ProductDetails = () => {
                                 </p>
                                 <p className='text-lg mb-4 text-gray-600 flex items-center'>
                                     <InboxOutlined className='text-yellow-500 mr-2' />
-                                    Quantity: {product.quantity}
+                                    Available Quantity: {product.quantity}
                                 </p>
                                 <p className='text-lg mb-4 text-gray-600 flex items-center'>
                                     <TagsOutlined className='text-orange-500 mr-2' />
@@ -129,7 +129,7 @@ const ProductDetails = () => {
                                     >
                                         <Meta
                                             title={p.name}
-                                            description={`$${p.price}`}
+                                            description={`Tk ${p.price}`}
                                             className='text-center'
                                         />
                                         <div className='mt-4 flex justify-between'>
