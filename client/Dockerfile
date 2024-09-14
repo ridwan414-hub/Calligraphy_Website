@@ -1,32 +1,35 @@
-# Use the official Node.js image as the base image
-FROM node:18-alpine as build
+# Use a smaller Node.js image for the build stage
+FROM node:18-alpine AS build
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy only package.json and package-lock.json first
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install all dependencies (including devDependencies for the build)
+RUN npm ci
 
 # Copy the rest of the application code
 COPY . .
 
-# Build the application
+# Build the React application
 RUN npm run build
 
-# Use the official Nginx image as the base image for the production build
+# Use a lightweight Nginx image to serve the built files
 FROM nginx:alpine
 
-# Copy the build output to the Nginx HTML directory
+# Remove default Nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy the custom Nginx configuration file
+COPY default.conf /etc/nginx/conf.d/
+
+# Copy the React build output to Nginx's HTML folder
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy custom Nginx configuration file
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-# Expose the port Nginx runs on
+# Expose the port that Nginx will listen on
 EXPOSE 80
 
-# Start Nginx
+# Start Nginx when the container starts
 CMD ["nginx", "-g", "daemon off;"]
