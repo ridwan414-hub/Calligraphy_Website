@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/auth";
 
 const TopBanner = () => {
+    const [auth] = useAuth()
     return (
         <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
             <div
@@ -39,12 +41,12 @@ const TopBanner = () => {
                     </svg>
                     Join The Event from June 7 – 9 to see what’s coming next.
                 </p>
-                <Link
+                {!auth.user && <Link
                     to="/register"
                     className="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
                 >
                     Register now <span aria-hidden="true">&rarr;</span>
-                </Link>
+                </Link>}
             </div>
             <div className="flex flex-1 justify-end">
                 <button

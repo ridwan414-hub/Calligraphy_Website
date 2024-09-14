@@ -5,7 +5,7 @@ import { RiMapPin2Line, RiPhoneLine, RiMailLine, RiTimeLine } from "react-icons/
 const Contact = () => {
     return (
         <Layout title={'Contact us'}>
-            <section className="bg-gradient-to-b from-sky-100 to-white py-16">
+            <section className="my-6 py-4 glass rounded-lg shadow-lg">
                 <div className="container mx-auto px-4">
                     <h1 className="text-5xl font-bold text-center text-sky-800 mb-12">Contact Us</h1>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
