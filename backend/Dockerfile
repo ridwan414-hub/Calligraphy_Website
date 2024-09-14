@@ -1,14 +1,14 @@
-# Use the official Node.js image as the base image
-FROM node:18
+# Use a smaller Node.js base image
+FROM node:18-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy only package.json and package-lock.json to leverage Docker cache
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci --only=production
 
 # Copy the rest of the application code
 COPY . .
