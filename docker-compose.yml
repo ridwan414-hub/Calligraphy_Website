@@ -1,6 +1,6 @@
 services:
   backend:
-    image: asifmahmoud414/calligraphy-backend:latest
+    build: ./backend
     ports:
       - "4000:4000"
     env_file:
@@ -10,10 +10,10 @@ services:
     networks:
       - app-network
     depends_on:
-      - redis # Ensure backend starts after Redis is up
+      - redis
 
   frontend:
-    image: asifmahmoud414/calligraphy-frontend:latest
+    build: ./client
     ports:
       - "80:80"
     depends_on:
@@ -22,11 +22,11 @@ services:
       - app-network
 
   redis:
-    image: "redis:alpine" # Use the latest Redis image
+    image: "redis:alpine"
     ports:
-      - "6379:6379" # Expose Redis default port
+      - "6379:6379"
     volumes:
-      - redis-data:/data # Persist data to a Docker volume
+      - redis-data:/data
     networks:
       - app-network
 
@@ -35,4 +35,4 @@ networks:
     driver: bridge
 
 volumes:
-  redis-data: # Define a Docker volume for Redis data persistence
+  redis-data:
