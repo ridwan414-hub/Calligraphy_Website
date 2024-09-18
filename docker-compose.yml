@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    networks:
+      - app-network
+    depends_on:
+      - redis # Ensure backend starts after Redis is up
+
+  frontend:
+    build: ./client
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  redis:
+    image: "redis/redis-stack:latest" # Use the latest Redis image
+    ports:
+      - "6379:6379" # Expose Redis default port
+    volumes:
+      - redis-data:/data # Persist data to a Docker volume
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  redis-data: # Define a Docker volume for Redis data persistence

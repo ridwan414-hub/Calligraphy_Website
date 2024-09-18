@@ -1,5 +1,31 @@
 import slugify from "slugify";
 import categoryModel from "../models/categoryModel.js";
+import redis from "../config/redis.js";
+
+
+// Redis utility functions
+const getOrSetCache = async (key, cb) => {
+    try {
+        const cachedData = await redis.get(key);
+        if (cachedData) {
+            return JSON.parse(cachedData);
+        }
+        const freshData = await cb();
+        await redis.setex(key, 3600, JSON.stringify(freshData)); // Cache for 1 hour
+        return freshData;
+    } catch (error) {
+        console.error(`Redis cache error for key ${key}:`, error);
+        return cb();
+    }
+};
+
+const clearCache = async (key) => {
+    try {
+        await redis.del(key);
+    } catch (error) {
+        console.error(`Error clearing Redis cache for key ${key}:`, error);
+    }
+};
 
 export const createCategoryController = async (req, res) => {
     try {
@@ -22,6 +48,8 @@ export const createCategoryController = async (req, res) => {
             slug: slugify(name)
         }).save();
 
+        await clearCache('allCategories');
+
         res.status(200).send({
             success: true,
             message: 'Category created successfully',
@@ -35,9 +63,9 @@ export const createCategoryController = async (req, res) => {
             message: 'Error in creating category',
             error
         });
-
     }
 }
+
 export const updateCategoryController = async (req, res) => {
     try {
         const { name } = req.body;
@@ -53,6 +81,9 @@ export const updateCategoryController = async (req, res) => {
             slug: slugify(name)
         }, { new: true });
 
+        await clearCache('allCategories');
+        await clearCache(`category:${updatedCategory.slug}`);
+
         res.status(200).send({
             success: true,
             message: 'Category updated successfully',
@@ -66,12 +97,15 @@ export const updateCategoryController = async (req, res) => {
             message: 'Error in updating category',
             error
         });
-
     }
 }
+
 export const getCategoriesController = async (req, res) => {
     try {
-        const categories = await categoryModel.find({});
+        const categories = await getOrSetCache('allCategories', async () => {
+            return categoryModel.find({});
+        });
+
         res.status(200).send({
             success: true,
             categories
@@ -84,13 +118,16 @@ export const getCategoriesController = async (req, res) => {
             message: 'Error in getting categories',
             error
         });
-
     }
 }
+
 export const getCategoryController = async (req, res) => {
     try {
         const { slug } = req.params;
-        const category = await categoryModel.findOne({ slug });
+        const category = await getOrSetCache(`category:${slug}`, async () => {
+            return categoryModel.findOne({ slug });
+        });
+
         if (!category) {
             return res.status(404).send({
                 success: false,
@@ -109,9 +146,9 @@ export const getCategoryController = async (req, res) => {
             message: 'Error in getting category',
             error
         });
-
     }
-} 
+}
+
 export const deleteCategoryController = async (req, res) => {
     try {
         const { id } = req.params;
@@ -122,6 +159,10 @@ export const deleteCategoryController = async (req, res) => {
                 message: 'Category not found'
             });
         }
+
+        await clearCache('allCategories');
+        await clearCache(`category:${deletedCategory.slug}`);
+
         res.status(200).send({
             success: true,
             message: 'Category deleted successfully',
@@ -135,8 +176,5 @@ export const deleteCategoryController = async (req, res) => {
             message: 'Error in deleting category',
             error
         });
-
     }
- }
-
-
+}
