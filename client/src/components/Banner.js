@@ -17,7 +17,7 @@ const Banner = () => {
                         loading="lazy"
                     />
                     <img
-                        src='/api/v1/product/product-photo/663a86a0f95207239bfc7275'
+                        src='/api/v1/product/product-photo/663a84d7f95207239bfc7254'
                         alt='pictureId-2'
                         className="hidden w-full h-52 object-cover rounded-lg sm:block sm:col-span-2 md:col-span-1 lg:row-start-2 lg:col-span-2 lg:h-32"
                         loading="lazy"
