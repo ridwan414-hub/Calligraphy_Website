@@ -1,10 +1,8 @@
-version: "3.8"
-
 services:
   backend:
-    build: ./backend
+    image: asifmahmoud414/calligraphy-backend:latest
     ports:
-      - "3000:3000"
+      - "4000:4000"
     env_file:
       - .env
     volumes:
@@ -15,7 +13,7 @@ services:
       - redis # Ensure backend starts after Redis is up
 
   frontend:
-    build: ./client
+    image: asifmahmoud414/calligraphy-frontend:latest
     ports:
       - "80:80"
     depends_on:
@@ -24,7 +22,7 @@ services:
       - app-network
 
   redis:
-    image: "redis/redis-stack:latest" # Use the latest Redis image
+    image: "redis:alpine" # Use the latest Redis image
     ports:
       - "6379:6379" # Expose Redis default port
     volumes:
