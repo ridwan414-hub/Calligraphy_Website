@@ -4,7 +4,6 @@ import { emailWithNodeMailer } from "../utils/mail.js";
 import userModel from "../models/userModel.js";
 import orderModel from "../models/orderModel.js";
 import createJWT from "../utils/createJWT.js";
-import redis from "../config/redis.js";
 
 
 export const registerController = async (req, res, next) => {
@@ -138,17 +137,7 @@ export const loginController = async (req, res) => {
                 message: 'Incorrect mail or password'
             });
         }
-        const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-        // Cache user data
-        await redis.setex(`user:${user._id}`, 3600, JSON.stringify({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            address: user.address,
-            role: user.role
-        }));
+        const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
 
         res.status(200).send({
             success: true,
@@ -254,9 +243,6 @@ export const resetPasswordController = async (req, res) => {
         const response = await userModel.findByIdAndUpdate(user._id, { password: hashedPassword }, { new: true });
         console.log(response)
 
-        // Invalidate user cache
-        await redis.del(`user:${user._id}`);
-
         res.status(200).send({
             success: true,
             message: 'Password Changed Successfully'
@@ -301,16 +287,6 @@ export const updateProfileController = async (req, res) => {
             address: address || user.address
         }, { new: true })
 
-        // Update cache
-        await redis.setex(`user:${updatedUser._id}`, 3600, JSON.stringify({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            phone: updatedUser.phone,
-            address: updatedUser.address,
-            role: updatedUser.role
-        }));
-
         res.status(200).send({
             success: true,
             message: 'Profile Updated Successfully',
@@ -328,20 +304,10 @@ export const updateProfileController = async (req, res) => {
 
 export const getOrdersController = async (req, res) => {
     try {
-        const cacheKey = `orders:${req.user._id}`;
-        const cachedOrders = await redis.get(cacheKey);
-
-        if (cachedOrders) {
-            return res.json(JSON.parse(cachedOrders));
-        }
-
         const orders = await orderModel
             .find({ buyer: req.user._id })
             .populate("products", "-photo")
             .populate("buyer", "name");
-
-        // Cache the orders for 5 minutes
-        await redis.setex(cacheKey, 300, JSON.stringify(orders));
 
         res.json(orders);
     } catch (error) {
@@ -356,21 +322,11 @@ export const getOrdersController = async (req, res) => {
 
 export const getAllOrdersController = async (req, res) => {
     try {
-        const cacheKey = 'all_orders';
-        const cachedOrders = await redis.get(cacheKey);
-
-        if (cachedOrders) {
-            return res.json(JSON.parse(cachedOrders));
-        }
-
         const orders = await orderModel
             .find({})
             .populate("products", "-photo")
             .populate("buyer", "name")
             .sort({ createdAt: -1 });
-
-        // Cache the orders for 5 minutes
-        await redis.setex(cacheKey, 300, JSON.stringify(orders));
 
         res.json(orders);
     } catch (error) {
@@ -389,10 +345,6 @@ export const updateOrderStatusController = async (req, res) => {
         const { status } = req.body;
         const order = await orderModel.findByIdAndUpdate(orderId, { status }, { new: true });
 
-        // Invalidate related caches
-        await redis.del(`orders:${order.buyer}`);
-        await redis.del('all_orders');
-
         res.json(order);
     }
     catch (error) {
@@ -407,18 +359,7 @@ export const updateOrderStatusController = async (req, res) => {
 
 export const getAllUsersController = async (req, res) => {
     try {
-        const cacheKey = 'all_users';
-        const cachedUsers = await redis.get(cacheKey);
-
-        if (cachedUsers) {
-            return res.json(JSON.parse(cachedUsers));
-        }
-
         const users = await userModel.find({});
-
-        // Cache the users for 10 minutes
-        await redis.setex(cacheKey, 600, JSON.stringify(users));
-
         res.json(users);
     } catch (error) {
         console.error(`Error in getAllUsersController: ${error}`);

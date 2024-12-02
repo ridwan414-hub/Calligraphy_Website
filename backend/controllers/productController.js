@@ -3,44 +3,7 @@ import slugify from 'slugify';
 import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
 import dotenv from 'dotenv';
-import braintree from 'braintree';
-import orderModel from '../models/orderModel.js';
-import redis from '../config/redis.js';
-
 dotenv.config();
-
-
-// Braintree payment gateway setup
-const gateway = new braintree.BraintreeGateway({
-    environment: braintree.Environment.Sandbox,
-    merchantId: process.env.BRAINTREE_MERCHANT_ID,
-    publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-    privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-});
-
-// Redis utility functions
-const getOrSetCache = async (key, cb) => {
-    try {
-        const cachedData = await redis.get(key);
-        if (cachedData) {
-            return JSON.parse(cachedData);
-        }
-        const freshData = await cb();
-        await redis.setex(key, 3600, JSON.stringify(freshData)); // Cache for 1 hour
-        return freshData;
-    } catch (error) {
-        console.error(`Redis cache error for key ${key}:`, error);
-        return cb();
-    }
-};
-
-const clearCache = async (key) => {
-    try {
-        await redis.del(key);
-    } catch (error) {
-        console.error(`Error clearing Redis cache for key ${key}:`, error);
-    }
-};
 
 // Controller functions
 
@@ -74,7 +37,6 @@ export const createProductController = async (req, res) => {
         }
 
         await product.save();
-        await clearCache('allProducts');
         res.status(201).send({
             success: true,
             message: 'Product created successfully',
@@ -93,9 +55,12 @@ export const createProductController = async (req, res) => {
 
 export const getProductsController = async (req, res) => {
     try {
-        const products = await getOrSetCache('allProducts', async () => {
-            return productModel.find({}).select('-photo').limit(12).sort({ createdAt: -1 }).populate('category');
-        });
+        const products = await productModel
+            .find({})
+            .select('-photo')
+            .limit(12)
+            .sort({ createdAt: -1 })
+            .populate('category');
 
         res.status(200).send({
             success: true,
@@ -116,9 +81,7 @@ export const getProductsController = async (req, res) => {
 export const getProductController = async (req, res) => {
     try {
         const { slug } = req.params;
-        const product = await getOrSetCache(`product:${slug}`, async () => {
-            return productModel.findOne({ slug }).select('-photo').populate('category');
-        });
+        const product = await productModel.findOne({ slug }).select('-photo').populate('category');
 
         if (!product) {
             return res.status(404).send({
@@ -168,8 +131,6 @@ export const getProductPhotoController = async (req, res) => {
 export const deleteProductController = async (req, res) => {
     try {
         const product = await productModel.findByIdAndDelete(req.params.pid).select("-photo");
-        await clearCache('allProducts');
-        await clearCache(`product:${product.slug}`);
         res.status(200).send({
             success: true,
             message: "Product deleted successfully"
@@ -215,8 +176,6 @@ export const updateProductController = async (req, res) => {
             product.photo.contentType = photo.type;
         }
         await product.save();
-        await clearCache('allProducts');
-        await clearCache(`product:${product.slug}`);
 
         res.status(201).send({
             success: true,
@@ -241,10 +200,7 @@ export const getProductFiltersController = async (req, res) => {
         if (checked.length > 0) args.category = checked;
         if (radio.length > 0) args.price = { $gte: radio[0], $lte: radio[1] };
 
-        const cacheKey = `filters:${JSON.stringify(args)}`;
-        const products = await getOrSetCache(cacheKey, async () => {
-            return productModel.find(args).populate('category');
-        });
+        const products = await productModel.find(args).populate('category');
 
         res.status(200).send({
             success: true,
@@ -264,9 +220,7 @@ export const getProductFiltersController = async (req, res) => {
 
 export const productCountController = async (req, res) => {
     try {
-        const total = await getOrSetCache('productCount', async () => {
-            return productModel.countDocuments();
-        });
+        const total = await productModel.countDocuments();
         res.status(200).send({
             success: true,
             message: 'Product count fetched successfully',
@@ -286,10 +240,7 @@ export const productListController = async (req, res) => {
     try {
         const perPage = 3;
         const page = req.params.page || 1;
-        const cacheKey = `productList:${page}`;
-        const products = await getOrSetCache(cacheKey, async () => {
-            return productModel.find({}).populate('category').select('-photo').skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 });
-        });
+        const products = await productModel.find({}).populate('category').select('-photo').skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 });
         res.status(200).send({
             success: true,
             message: 'Products fetched successfully',
@@ -315,15 +266,12 @@ export const searchProductController = async (req, res) => {
                 message: 'Keyword is required'
             });
         }
-        const cacheKey = `search:${keyword}`;
-        const products = await getOrSetCache(cacheKey, async () => {
-            return productModel.find({
-                $or: [
-                    { name: { $regex: keyword, $options: 'i' } },
-                    { description: { $regex: keyword, $options: 'i' } }
-                ]
-            }).select('-photo');
-        });
+        const products = await productModel.find({
+            $or: [
+                { name: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } }
+            ]
+        }).select('-photo');
         res.status(200).json(products);
     } catch (error) {
         console.error(`Error in searchProductController: ${error}`);
@@ -338,13 +286,10 @@ export const searchProductController = async (req, res) => {
 export const relatedProductsController = async (req, res) => {
     try {
         const { pid, cid } = req.params;
-        const cacheKey = `relatedProducts:${pid}:${cid}`;
-        const products = await getOrSetCache(cacheKey, async () => {
-            return productModel.find({
-                _id: { $ne: pid },
-                category: cid
-            }).select('-photo').limit(3).populate('category');
-        });
+        const products = await productModel.find({
+            _id: { $ne: pid },
+            category: cid
+        }).select('-photo').limit(3).populate('category');
         res.status(200).send({
             success: true,
             message: 'Related products fetched successfully',
@@ -363,15 +308,8 @@ export const relatedProductsController = async (req, res) => {
 export const getProductsByCategoryController = async (req, res) => {
     try {
         const { slug } = req.params;
-        const cacheKey = `productsByCategory:${slug}`;
-        const { category, products } = await getOrSetCache(cacheKey, async () => {
-            const category = await categoryModel.findOne({ slug });
-            if (!category) {
-                return { category: null, products: [] };
-            }
-            const products = await productModel.find({ category }).populate('category');
-            return { category, products };
-        });
+        const category = await categoryModel.findOne({ slug });
+        const products = await productModel.find({ category: category._id }).select('-photo').populate('category');
 
         if (!category) {
             return res.status(400).send({
@@ -396,49 +334,5 @@ export const getProductsByCategoryController = async (req, res) => {
     }
 };
 
-export const getBraintreeTokenController = async (req, res) => {
-    try {
-        gateway.clientToken.generate({}, function (err, response) {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.send(response);
-            }
-        });
-    } catch (error) {
-        console.log(error);
-    }
-};
 
-export const braintreePaymentController = async (req, res) => {
-    try {
-        const { nonce, cart } = req.body;
-        let total = 0;
-        cart.map((i) => {
-            total += i.price;
-        });
-        gateway.transaction.sale(
-            {
-                amount: total,
-                paymentMethodNonce: nonce,
-                options: {
-                    submitForSettlement: true,
-                },
-            },
-            function (error, result) {
-                if (result) {
-                    new orderModel({
-                        products: cart,
-                        payment: result,
-                        buyer: req.user._id,
-                    }).save();
-                    res.json({ ok: true });
-                } else {
-                    res.status(500).send(error);
-                }
-            }
-        );
-    } catch (error) {
-        console.log(error);
-    }
-};
+
